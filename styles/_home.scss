@@ -5,7 +5,7 @@ body {
 nav {
   font-size: 1rem;
   border-bottom: 2px solid #f2f3f5;
-  padding: 0.9rem calc((100% - 80rem) / 2 + 1rem);
+  padding: 0.8rem calc((100% - 80rem) / 2 + 1rem);
   .cities {
     height: 100%;
     > button {
@@ -98,6 +98,12 @@ nav {
       font-size: 1.1rem;
       height: 100%;
       background-color: transparent;
+    }
+  }
+  .logo {
+    min-width: 5rem;
+    svg {
+      color: #6300a3;
     }
   }
 }
@@ -208,11 +214,28 @@ nav {
     align-items: center;
   }
 }
+h3.noline {
+  color: #2e054e;
+  text-transform: capitalize;
+  width: 100%;
+  font-weight: 500;
+  margin-top: 3rem;
+  font-size: 1.5rem;
+  line-height: 24px;
+  margin-bottom: 24px;
+}
+button.loadMore {
+  margin: 0px auto;
+  background-color: #2e054e;
+  width: 8rem;
+  height: 2.5rem;
+  color: white;
+  border-radius: 1vmin;
+}
 h3.subHeading {
   align-items: center;
   color: #2e054e;
   text-transform: capitalize;
-
   display: flex;
   width: 100%;
   font-weight: 500;
@@ -314,9 +337,10 @@ main.ads {
         font-size: 1.05rem;
       }
       strong {
-        font-size: 20px;
+        font-size: 21px;
         line-height: 24px;
-        font-weight: 600;
+        font-weight: 500;
+        color: #2e054e;
         span {
           font-weight: 400;
           font-size: 1rem;

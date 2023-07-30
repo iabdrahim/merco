@@ -28,7 +28,7 @@ const ALL = {
     github: "https://github.com/iabdrahim",
     instagram: "https://instagram.com/iabderrahim",
   },
-  ApiEndPoint: `https://avito-clone.onrender.com`, //your api endpoint
+  ApiEndPoint: "https://merco-api.onrender.com",
   seo: {
     keywords: [
       "hamesh",

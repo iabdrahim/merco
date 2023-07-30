@@ -6,9 +6,15 @@ export default function CitiesPop() {
 
   useEffect(() => {
     let fetchCity = async () => {
-      let req = await fetch(
-        "https://api.bigdatacloud.net/data/reverse-geocode-client"
-      );
+      let req;
+      try {
+        req = await fetch(
+          "https://api.bigdatacloud.net/data/reverse-geocode-client"
+        );
+      } catch (err) {
+        console.log(err);
+        return;
+      }
       let data = await req.json();
       console.log(data);
       if (data?.city) {

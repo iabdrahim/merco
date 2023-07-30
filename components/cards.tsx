@@ -16,8 +16,12 @@ export default function Cards({
     <main className={`ads w-full ${className || ""}`}>
       {data && data?.map((ad: IAd) => <Ad key={ad._id} data={ad} />)}
 
-      {isLoading && !data && (
+      {isLoading && (
         <>
+          <PostLoader />
+          <PostLoader />
+          <PostLoader />
+          <PostLoader />
           <PostLoader />
           <PostLoader />
           <PostLoader />

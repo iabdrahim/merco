@@ -9,7 +9,7 @@ import {
   PiTShirtDuotone,
   PiGameControllerDuotone,
   PiArmchairDuotone,
-  PiDiceFourDuotone
+  PiDiceFourDuotone,
 } from "react-icons/pi";
 import { filterQueryContext } from "../../context/filter";
 import { useSearch } from "../../utils/useApi";
@@ -57,16 +57,16 @@ export default function Catagories() {
           style={{ transform: `translate(${X}px)` }}
         ></div>
         <button id="0" onClick={onChangeCtg} className="active">
-          Jobs <PiBagSimpleDuotone />
+          electonics <PiComputerTowerDuotone />
         </button>
         <button id="1" onClick={onChangeCtg}>
           automobiles <PiCarSimpleDuotone />
         </button>
-        <button id="2" onClick={onChangeCtg}>
-          Electonics <PiComputerTowerDuotone />
-        </button>
         <button id="3" onClick={onChangeCtg}>
-          Estate <PiHouseLineDuotone />
+          estate <PiHouseLineDuotone />
+        </button>
+        <button id="2" onClick={onChangeCtg}>
+          jobs <PiBagSimpleDuotone />
         </button>
         <button id="4" onClick={onChangeCtg}>
           fashion <PiTShirtDuotone />
@@ -75,7 +75,7 @@ export default function Catagories() {
           entertainment <PiGameControllerDuotone />
         </button>
         <button id="6" onClick={onChangeCtg}>
-          home <PiArmchairDuotone />
+          lifestyle <PiArmchairDuotone />
         </button>
         <button id="7" onClick={onChangeCtg}>
           others <PiDiceFourDuotone />

@@ -8,18 +8,17 @@ const PostLoader = (props: any) => {
       backgroundColor="#4d4d4d"
       backgroundOpacity={0.2}
       foregroundOpacity={0.2}
-      viewBox="0 0 450 550"
-      rtl
+      viewBox="0 0 400 370"
       {...props}
     >
       {/* Cover image */}
-      <rect x="0" y="0" rx="10" ry="10" width="450" height="350" />
-      {/* title */}
-      <rect x="0" y="370" rx="10" ry="10" width="300" height="20" />
+      <rect x="0" y="0" rx="10" ry="10" width="400" height="250" />
+      {/* price */}
+      <rect x="0" y="270" rx="10" ry="10" width="100" height="25" />
+      <rect x="0" y="310" rx="10" ry="10" width="200" height="16" />
       {/* description */}
-      <rect x="0" y="400" rx="10" ry="10" width="420" height="80" />
-      <rect x="420" y="500" rx="10" ry="10" width="20" height="20" />
-      <rect x="390" y="500" rx="10" ry="10" width="20" height="20" />
+      <rect x="0" y="350" rx="5" ry="5" width="90" height="10" />
+      <rect x="310" y="350" rx="5" ry="5" width="90" height="10" />
     </ContentLoader>
   );
 };

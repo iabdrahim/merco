@@ -47,7 +47,10 @@ export default function EditorProvider({ children }: { children: any }) {
           v = v.replaceAll(" ", "");
           v = sortDec[v];
         }
-        str += `${k}=${Array.isArray(v) ? v.join(",") : v}|`;
+        if (v == "0-0") v = "";
+        if (v) {
+          str += `${k}=${Array.isArray(v) ? v.join(",") : v}|`;
+        }
       }
     }
     let arr = str.split("|");

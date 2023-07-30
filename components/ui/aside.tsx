@@ -87,20 +87,20 @@ export default function Aside() {
         </div>
         <div className="ctgs w-full mx-auto relative">
           <button onClick={onChangeCtg} className="active">
-            All <PiFolderNotchOpenDuotone />
-          </button>
-          <button onClick={onChangeCtg} className="active">
-            Electonics <PiComputerTowerDuotone />
+            all <PiFolderNotchOpenDuotone />
           </button>
           <button onClick={onChangeCtg}>
-            Jobs
+            electonics <PiComputerTowerDuotone />
+          </button>
+          <button onClick={onChangeCtg}>
+            jobs
             <PiBagSimpleDuotone />
           </button>
           <button onClick={onChangeCtg}>
             automobiles <PiCarSimpleDuotone />
           </button>
           <button onClick={onChangeCtg}>
-            Estate <PiHouseLineDuotone />
+            estate <PiHouseLineDuotone />
           </button>
           <button onClick={onChangeCtg}>
             fashion <PiTShirtDuotone />
@@ -109,7 +109,7 @@ export default function Aside() {
             entertainment <PiGameControllerDuotone />
           </button>
           <button onClick={onChangeCtg}>
-            home <PiArmchairDuotone />
+            lifestyle <PiArmchairDuotone />
           </button>
           <button onClick={onChangeCtg}>
             others <PiDiceFourDuotone />

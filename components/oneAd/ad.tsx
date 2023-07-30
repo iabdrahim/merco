@@ -15,14 +15,18 @@ export default function Ad({ data }: { data: IAd }) {
           />
         </div>
       </Link>
-      <div className="info flex justify-between items-start">
-        <Link href={"/ads/" + data._id} className="left">
-          <h5>{data.title}</h5>
-          <strong>
-            {data.price} DH <span>{moment(data.createdAt).fromNow()}</span>
-          </strong>
+      <div className="info flex justify-between items-start relative">
+        <Link href={"/ads/" + data._id} className="left w-full">
+          <strong className="">{data.price} DH</strong>
+          <div className="flex gap-1 flex-col w-full">
+            <h5>{data.title}</h5>
+            <div className="flex justify-between items-center w-full">
+              <span>City</span>
+              <span>{moment(data.createdAt).fromNow()}</span>
+            </div>
+          </div>
         </Link>
-        <div className="right pr-4 pt-2">
+        <div className="top-3 right-3 absolute">
           <button className="hoverShadow rounded-full">
             <AiOutlineHeart size={24} />
           </button>
