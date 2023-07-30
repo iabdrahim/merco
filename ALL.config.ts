@@ -1,7 +1,7 @@
 const ALL = {
   title: "store",
   author: "Abderrahim",
-  link: "https://hamesh.vercel.app",
+  link: "https://merco.vercel.app",
   email: "abderrahimaneddam1@gmail.com",
   description: "this is a store",
   lang: "ar-EG", // ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP', 'es-ES']

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import ALL from "../ALL.config";
 
 const SEO = ({ meta }: { meta: any }) => {
-  const ogImage = `https://${ALL.ogImageGenerateHost}/api/default?logo=${
+  const ogImage = `${ALL.link}/api/default?logo=${
     ALL.link
   }/favicon.png&siteName=${encodeURIComponent(
     ALL.title?.trim()
@@ -41,12 +41,12 @@ const SEO = ({ meta }: { meta: any }) => {
         property="og:url"
         content={meta.slug ? `${url}/${meta.slug}` : `${url}${router.asPath}`}
       />
-      <meta property="og:image" content={ogImage || ALL.defaultCover} />
+      <meta property="og:image" content={ogImage} />
       <meta property="og:type" content={meta.type} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:title" content={meta.title} />
-      <meta name="twitter:image" content={ogImage || ALL.defaultCover} />
+      <meta name="twitter:image" content={ogImage} />
       {meta.type === "aricle" && (
         <>
           <meta property="article:published_time" content={meta.date} />
