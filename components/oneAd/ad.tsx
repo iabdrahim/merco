@@ -2,7 +2,7 @@ import moment from "moment";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineHeart } from "react-icons/ai";
-import { IAd } from "../utils/interfaces";
+import { IAd } from "../../utils/interfaces";
 
 export default function Ad({ data }: { data: IAd }) {
   return (

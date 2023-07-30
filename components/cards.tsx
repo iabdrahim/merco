@@ -1,6 +1,6 @@
 import React from "react";
 import { IAd } from "../utils/interfaces";
-import Ad from "./ad";
+import Ad from "./oneAd/ad";
 import PostLoader from "./loaders";
 
 export default function Cards({

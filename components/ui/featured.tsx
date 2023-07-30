@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useContext, useState } from "react";
 import { filterQueryContext } from "../../context/filter";
 import { useSearch } from "../../utils/useApi";
-import Ad from "../ad";
+import Ad from "../oneAd/ad";
 import Cards from "../cards";
 
 export default function Featured() {
