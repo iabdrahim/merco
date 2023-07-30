@@ -1,6 +1,5 @@
 import { NextApiResponse } from "next";
 import ALL from "../ALL.config";
-import dbConnect from "../utils/db";
 
 //pages/sitemap.xml.js
 const EXTERNAL_DATA_URL = ALL.link;
