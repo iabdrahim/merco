@@ -4,11 +4,13 @@ import React, { useEffect, useState } from "react";
 import Nav from "./nav";
 import Footer from "./footer";
 export default function Layout({ children }: { children: any }) {
+  let r = useRouter();
+  let noNavAndFooter = ["/post"];
   return (
     <>
-      <Nav />
+      {!noNavAndFooter.some((el) => el == r.asPath) && <Nav />}
       {children}
-      <Footer />
+      {!noNavAndFooter.some((el) => el == r.asPath) && <Footer />}
     </>
   );
 }

@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import ALL from "../ALL.config";
-import { IAd } from "./interfaces";
+import { IAd, IUser } from "./interfaces";
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 const poster = (url: string, body: {}) => {
   return fetch(url, {
@@ -9,7 +9,9 @@ const poster = (url: string, body: {}) => {
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
-  });
+  })
+    .catch((err) => err)
+    .then((d) => d);
 };
 
 let API_URL = ALL.ApiEndPoint;
@@ -34,8 +36,13 @@ function setAd(body?: {}) {
   if (!body) return;
   let isLoading = true;
   let error = null;
-  let res = poster(API_URL + "/ads", body);
-  res.catch((err) => (error = err));
+  let res: any = poster(API_URL + "/ads", body);
+  res.catch((err: Error) => ((isLoading = false), (error = err)));
+  res.then((d: any) => d.json());
+  res.then((d: any) => {
+    isLoading = false;
+    return d;
+  });
 
   return {
     data: res,
@@ -59,18 +66,35 @@ function useAds(query?: unknown) {
     error: error,
   };
 }
+function useProfile() {
+  const {
+    data,
+    error,
+    isLoading,
+  }: { data: IUser; isLoading: boolean; error: undefined } = useSWR(
+    `${API_URL}/auth/profile`,
+    fetcher
+  );
+
+  return {
+    profile: data,
+    isLoading,
+    error: error,
+  };
+}
+
 function useUser(id: unknown) {
   const {
     data,
     error,
     isLoading,
-  }: { data: IAd; isLoading: boolean; error: undefined } = useSWR(
+  }: { data: IUser; isLoading: boolean; error: undefined } = useSWR(
     `${API_URL}/users/${id}`,
     fetcher
   );
 
   return {
-    ads: data,
+    user: data,
     isLoading,
     error: error,
   };
@@ -92,4 +116,4 @@ function useSearch(queries?: string | any) {
     error: error,
   };
 }
-export { useAd, useAds, useSearch, useUser, setAd, fetcher };
+export { useAd, useAds, useSearch, useUser, useProfile, setAd, fetcher };

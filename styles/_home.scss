@@ -103,11 +103,11 @@ nav {
   .logo {
     min-width: 5rem;
     svg {
-      color: #6300a3;
+      color: #210e36;
     }
   }
 }
-.ctgs {
+section .ctgs {
   overflow: hidden;
   overflow-x: auto;
   h4 {
@@ -281,7 +281,7 @@ section {
       white-space: nowrap;
       width: 175px;
       &.active {
-        background-color: #6300a3;
+        background-color: hsl(276, 100%, 32%);
         color: #fff;
         border-color: #6300a3;
       }
