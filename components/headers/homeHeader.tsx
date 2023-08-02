@@ -75,7 +75,7 @@ export default function Header() {
         </main>
       </div> */}
       <Container>
-        <div className="ctgs flex justify-start h-10 items-center max-md:px-4 mx-auto gap-4">
+        <div className="catagories flex justify-start h-10 items-center max-md:px-4 mx-auto gap-4">
           <h4>Catagories</h4>
           {catagories.map((ctg: string, i: number) => (
             <Link

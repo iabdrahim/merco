@@ -18,7 +18,7 @@ export default function Nav() {
               height={26}
               alt={"website logo"}
             />
-            Merco
+            <span className="">Merco</span>
           </div>
         </Link>
         <CitiesPop />

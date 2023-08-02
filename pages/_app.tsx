@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import ALL from "../ALL.config";
 import * as gtag from "../lib/gtag";
 import NextProgress from "next-progress";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const variants = {
   in: {
@@ -59,7 +60,7 @@ export default function App({
   }, [router.events]);
   return (
     <>
-      <SessionProvider session={session}>
+      <UserProvider>
         <FilterQueryContext>
           <Layout>
             <AnimatePresence
@@ -84,7 +85,7 @@ export default function App({
             </AnimatePresence>
           </Layout>
         </FilterQueryContext>
-      </SessionProvider>
+      </UserProvider>
     </>
   );
 }

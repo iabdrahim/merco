@@ -1,32 +1,39 @@
-import React, { useState } from "react";
-import { BiImageAdd, BiLeftArrow } from "react-icons/bi";
-import Container from "../components/Container";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import {
-  PiComputerTowerDuotone,
+  PiArmchairDuotone,
+  PiArrowArcLeftDuotone,
   PiBagSimpleDuotone,
   PiCarSimpleDuotone,
+  PiComputerTowerDuotone,
+  PiDiceFourDuotone,
+  PiGameControllerDuotone,
   PiHouseLineDuotone,
   PiTShirtDuotone,
-  PiGameControllerDuotone,
-  PiArmchairDuotone,
-  PiDiceFourDuotone,
 } from "react-icons/pi";
 import ALL from "../ALL.config";
+import Container from "../components/Container";
+import { useProfile } from "../utils/useApi";
+export const getServerSideProps = withPageAuthRequired();
 
 export default function Post() {
+  let { profile } = useProfile();
   let [adData, setData] = useState<{
     catagorie: string;
     title: string;
     description: string;
     price: number;
-    images: string[];
+    images: string[] | [];
     city: string;
   }>({
-    catagorie: "",
+    catagorie: "electronics",
     title: "",
     description: "",
     price: 0,
-    images: [""],
+    images: ["", "", "", "", "", ""],
     city: "",
   });
   let onChangeCtg = (e: any) => {
@@ -40,8 +47,13 @@ export default function Post() {
     });
     e.target.classList.add("active");
   };
-  let postAd = async () => {
-    let res = await fetch(ALL.ApiEndPoint + "/ads", {
+  let postAd = async (e: any) => {
+    e.preventDefault();
+    adData.images = adData.images.filter((el) => el != "");
+    if (!adData.images) {
+      return;
+    }
+    let res = await fetch(ALL.ApiEndPoint + "/ads?email=" + profile?.email, {
       method: "POST",
       body: JSON.stringify(adData),
       headers: {
@@ -51,8 +63,13 @@ export default function Post() {
     let data = await res.json();
     return data;
   };
+  let r = useRouter();
+
   //upload a image to cloud
   let handleUpload = async (e: any) => {
+    let nd = adData;
+    nd.images[Number(e.target.id)] = "null";
+    setData(nd);
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
@@ -66,23 +83,34 @@ export default function Post() {
       config
     );
     const file: { secure_url: string } = await res.json();
-
-    setData({ ...adData, images: [...adData.images, file.secure_url] });
-    // e.target.style.backgoroundImage=url
+    let newdata = adData;
+    newdata.images[Number(e.target.id)] = file.secure_url;
+    console.log(newdata);
+    setData(newdata);
+    e.target.value = "";
+    r.push("/post", {}, { shallow: true });
+  };
+  let handleRemove = (e: any) => {
+    let newdata = adData;
+    newdata.images[Number(e.target.id)] = "";
+    setData(newdata);
+    r.push("/post", {}, { shallow: true });
   };
   return (
     <div className="sell">
       <div className="back absolute left-4 top-4">
-        <BiLeftArrow size={24} />
+        <Link href="/">
+          <PiArrowArcLeftDuotone size={24} />
+        </Link>
       </div>
       <Container className="flex justify-start items-center flex-col">
         <h2>Post an Ad</h2>
-        <div className="table">
-          <div className="">
+        <form className="table" onSubmit={postAd}>
+          <div className="_catagorie">
             <h4>Catagorie</h4>
             <div className="ctgs w-full relative">
               <button onClick={onChangeCtg} className="active">
-                electonics <PiComputerTowerDuotone />
+                electronics <PiComputerTowerDuotone />
               </button>
               <button onClick={onChangeCtg}>
                 jobs <PiBagSimpleDuotone />
@@ -107,7 +135,7 @@ export default function Post() {
               </button>
             </div>
           </div>
-          <div className="">
+          <div className="_title">
             <h4>Include Some Details</h4>
             <div>
               <label
@@ -120,15 +148,16 @@ export default function Post() {
               <input
                 type="text"
                 placeholder=""
+                required
                 value={adData.title}
                 onChange={(e) => setData({ ...adData, title: e.target.value })}
                 name="title"
-                className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-5 py-2.5 text-gray-700 focus:border-black focus:outline-none"
+                className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-black focus:outline-none"
               />
 
               <p className="mt-1 text-sm text-gray-500">
-                Mention the key features of your item (e.g. brand, model, age,
-                type)
+                Mention the key features of your item (e.g. brand, model,
+                age,type)
               </p>
             </div>
             <div>
@@ -141,6 +170,8 @@ export default function Post() {
 
               <textarea
                 placeholder=""
+                required
+                minLength={100}
                 value={adData.description}
                 onChange={(e) =>
                   setData({ ...adData, description: e.target.value })
@@ -152,7 +183,7 @@ export default function Post() {
               </p>
             </div>
           </div>
-          <div className="">
+          <div className="_price">
             <h4>Set a Price</h4>
             <div>
               <label
@@ -167,12 +198,13 @@ export default function Post() {
                   type="number"
                   placeholder="100"
                   min={3}
+                  required
                   value={adData.price}
                   onChange={(e) =>
                     setData({ ...adData, price: Number(e.target.value) })
                   }
                   name="price"
-                  className="block w-full max-w-xs rounded-r-none placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border-2 border-gray-300 bg-white px-5 py-2.5 text-gray-700 focus:border-purple-400 focus:outline-none-purple-300"
+                  className="block w-full max-w-xs rounded-r-none placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-purple-400 focus:outline-none-purple-300"
                 />
                 <p className="py-2.5 px-3 text-gray-500 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border border-r-0 rounded-r-lg">
                   DH
@@ -180,70 +212,51 @@ export default function Post() {
               </div>
             </div>
           </div>
-          <div className="">
-            <h4>Upload Up To 6 Photos</h4>
+          <div className="_images">
+            <h4>
+              Upload Up To 6 Photos
+              <span className="text-gray-500 mx-4 text-sm">
+                (minimum one image)
+              </span>
+            </h4>
             <div className="flex gap-4 flex-wrap">
-              <div className="img">
-                <BiImageAdd size={24} className="relative" />
-                <input
-                  type="file"
-                  onInput={handleUpload}
-                  className="opacity-0 absolute w-full h-full left-0 top-0"
-                />
-              </div>
-              <div className="img">
-                <input
-                  type="file"
-                  onInput={handleUpload}
-                  className="opacity-0 absolute w-full h-full left-0 top-0"
-                />
-                <BiImageAdd size={24} />
-              </div>
-              <div className="img">
-                <input
-                  type="file"
-                  onInput={handleUpload}
-                  className="opacity-0 absolute w-full h-full left-0 top-0"
-                />
-                <BiImageAdd size={24} />
-              </div>
-              <div className="img">
-                <BiImageAdd size={24} className="" />
-                <input
-                  type="text"
-                  className="opacity-0 absolute w-full h-full -left-0 top-0"
-                />
-              </div>
-              <div className="img">
-                <input
-                  type="file"
-                  onInput={handleUpload}
-                  className="opacity-0 absolute w-full h-full left-0 top-0"
-                />
-                <BiImageAdd size={24} />
-              </div>
-              <div className="img">
-                <input
-                  type="file"
-                  onInput={handleUpload}
-                  className="opacity-0 absolute w-full h-full left-0 top-0"
-                />
-                <BiImageAdd size={24} />
-              </div>
+              {adData.images.map((v, i) => (
+                <div className="img relative" key={i}>
+                  {v != "" && v != "null" ? (
+                    <>
+                      <button className="relative" onClick={handleRemove}>
+                        <BiXCircle size={24} className="text-white" />
+                      </button>
+                      <img src={v} className="w-full h-full absoulute" alt="" />
+                    </>
+                  ) : (
+                    <BiImageAdd size={24} className="relative" />
+                  )}
+                  <input
+                    type="file"
+                    id={i.toString()}
+                    onInput={handleUpload}
+                    className={`opacity-0 absolute w-full h-full left-0 top-0 cursor-pointer ${
+                      adData.images[i] && adData.images[i] != "null"
+                        ? "hidden"
+                        : ""
+                    }`}
+                  />
+                </div>
+              ))}
             </div>
           </div>
-          <div className="">
+          <div className="_city">
             <h4>Confirm Your Location</h4>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
               <label htmlFor="slist">City</label>
               <select
                 name="slist"
+                required
                 className="px-3 py-2"
                 onChange={(e) => setData({ ...adData, city: e.target.value })}
               >
-                <option value="Agadir" selected>
-                  Agadir
-                </option>
+                <option value="Agadir">Agadir</option>
                 <option value="Al Hoceima">Al Hoceima</option>
                 <option value="Azilal">Azilal</option>
                 <option value="Beni Mellal">Beni Mellal</option>
@@ -287,44 +300,59 @@ export default function Post() {
               </select>
             </div>
           </div>
-          <div className="">
+          <div className="_author">
             <h4>Rreview Your Details</h4>
-            <div className="name">
-              <div className="avatar">
-                <img src="" alt="" />
-              </div>
-              <div className="">
-                <label htmlFor="">name</label>
-                <input type="text" />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="number"
-                className="block text-sm text-gray-500 dark:text-gray-300"
-              >
-                phone number
-              </label>
-
-              <div className="flex items-center mt-2">
-                <p className="py-2.5 px-3 text-gray-500 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border border-r-0 rtl:rounded-r-lg rtl:rounded-l-none rtl:border-l-0 rtl:border-r rounded-l-lg">
-                  +212
-                </p>
-                <input
-                  type="number"
-                  placeholder="100"
-                  name="number"
-                  className="block w-full max-w-xs rounded-l-none rtl:rounded-l-lg rtl:rounded-r-none placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border-2 border-gray-300 bg-white px-5 py-2.5 text-gray-700 focus:border-purple-400 focus:outline-none-purple-300"
+            <div className="name flex gap-4 justify-start items-center flex-wrap">
+              <div className="avatar w-14 rounded-full overflow-hidden h-14">
+                <img
+                  src={profile?.avatar}
+                  alt=""
+                  className="w-full h-full object-cover"
                 />
               </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor=""
+                  className="block text-sm text-gray-500 dark:text-gray-300"
+                >
+                  name
+                </label>
+                <input
+                  type="text"
+                  placeholder="new name"
+                  required
+                  defaultValue={profile?.name}
+                  className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-black focus:outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="number"
+                  className="block text-sm text-gray-500 dark:text-gray-300"
+                >
+                  phone number
+                </label>
+
+                <div className="flex items-center mt-2">
+                  <p className="py-2.5 px-3 text-gray-500 bg-gray-100 dark:bg-gray-800 dark:border-gray-700 border border-r-0 rtl:rounded-r-lg rtl:rounded-l-none rtl:border-l-0 rtl:border-r rounded-l-lg">
+                    +212
+                  </p>
+                  <input
+                    type="number"
+                    placeholder="100"
+                    name="number"
+                    defaultValue={profile?.phoneNumber}
+                    className="block w-full max-w-xs rounded-l-none rtl:rounded-l-lg rtl:rounded-r-none placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-purple-400 focus:outline-none-purple-300"
+                  />
+                </div>
+              </div>
             </div>
+            <button className="up">update</button>
           </div>
-          <div className="">
-            <button className="post" onClick={() => postAd()}>
-              post Now
-            </button>
-          </div>
-        </div>
+          <button className="post" type="submit">
+            post Now
+          </button>
+        </form>
       </Container>
     </div>
   );

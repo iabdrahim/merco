@@ -1,6 +1,8 @@
 import useSWR from "swr";
 import ALL from "../ALL.config";
 import { IAd, IUser } from "./interfaces";
+import { useUser } from "@auth0/nextjs-auth0/client";
+
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 const poster = (url: string, body: {}) => {
   return fetch(url, {
@@ -67,23 +69,24 @@ function useAds(query?: unknown) {
   };
 }
 function useProfile() {
+  const { user } = useUser();
   const {
     data,
     error,
     isLoading,
   }: { data: IUser; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/auth/profile`,
+    `${API_URL}/auth/profile?email=${user?.email}&picture=${user?.picture}`,
     fetcher
   );
 
   return {
     profile: data,
-    isLoading,
+    isLoading: isLoading,
     error: error,
   };
 }
 
-function useUser(id: unknown) {
+function useAUser(id: unknown) {
   const {
     data,
     error,
@@ -116,4 +119,4 @@ function useSearch(queries?: string | any) {
     error: error,
   };
 }
-export { useAd, useAds, useSearch, useUser, useProfile, setAd, fetcher };
+export { useAd, useAds, useSearch, useAUser, useProfile, setAd, fetcher };

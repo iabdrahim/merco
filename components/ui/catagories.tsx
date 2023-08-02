@@ -28,7 +28,7 @@ let catagories = [
 
 export default function Catagories() {
   const [X, setX] = useState<number>(0);
-  const [ctg, setctg] = useState("automobiles");
+  const [ctg, setctg] = useState("electonics");
   let { ads, isLoading, error } = useSearch("?catagorie=" + ctg + "&limit=12");
   let { setFilterQuery } = useContext(filterQueryContext);
   let onChangeCtg = (e: any) => {
@@ -62,10 +62,10 @@ export default function Catagories() {
         <button id="1" onClick={onChangeCtg}>
           automobiles <PiCarSimpleDuotone />
         </button>
-        <button id="3" onClick={onChangeCtg}>
+        <button id="2" onClick={onChangeCtg}>
           estate <PiHouseLineDuotone />
         </button>
-        <button id="2" onClick={onChangeCtg}>
+        <button id="3" onClick={onChangeCtg}>
           jobs <PiBagSimpleDuotone />
         </button>
         <button id="4" onClick={onChangeCtg}>

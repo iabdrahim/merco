@@ -8,7 +8,7 @@ export default function Page() {
     <>
       <Header />
       <Catagories />
-      <Howwork />
+      {/* <Howwork /> */}
       <Container>
         <Featured />
       </Container>

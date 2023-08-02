@@ -53,14 +53,33 @@
       .ctgs {
         width: fit-content;
       }
+      select {
+        width: 14rem;
+        background-color: #eee;
+        border-radius: 1vmin;
+      }
       .img {
-        width: 6rem;
+        width: 7rem;
         height: 6rem;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 1vmin;
         background-color: #f2f3f5;
+        overflow: hidden;
+        svg,
+        button {
+          position: relative;
+          cursor: pointer;
+          z-index: 5;
+        }
+        input {
+          z-index: 10;
+        }
+        img {
+          position: absolute;
+          object-fit: cover;
+        }
       }
       h4 {
         font-size: 1.1rem;
@@ -83,8 +102,20 @@
     font-weight: 500;
     margin: auto;
     max-width: 9rem;
+    margin-bottom: 2rem;
     color: white;
     font-size: 1.2rem;
     background-color: #ed264f;
+  }
+  .up {
+    border-radius: 1vmin;
+    padding: 0.5rem 1rem;
+    height: fit-content;
+    text-transform: capitalize;
+    font-weight: 500;
+    max-width: 5rem;
+    color: white;
+    font-size: 1rem;
+    background-color: #2e054e;
   }
 }
