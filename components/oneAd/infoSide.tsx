@@ -23,7 +23,7 @@ export default function InfoSide({ ad }: { ad: IAd }) {
         {ad.price}
         <span>DH</span>
       </h3>
-      <div className="flex justify-between w-full items-center">
+      <div className="flex justify-between w-full items-center flex-wrap gap-2">
         <div className="user">
           <div className="avatar">
             <img
@@ -33,7 +33,7 @@ export default function InfoSide({ ad }: { ad: IAd }) {
           </div>
           <h4>Developer I am </h4>
         </div>
-        <div className="actions flex justify-start items-center">
+        <div className="userActions flex justify-start items-center">
           <button onClick={() => setphonePop(true)}>
             <HiOutlinePhone size={20} />
           </button>

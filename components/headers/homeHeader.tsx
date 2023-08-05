@@ -79,7 +79,7 @@ export default function Header() {
           <h4>Catagories</h4>
           {catagories.map((ctg: string, i: number) => (
             <Link
-              href={"/search"}
+              href={"/ads"}
               onClick={() =>
                 setFilterQuery((prv: {}) => ({ ...prv, catagorie: ctg }))
               }

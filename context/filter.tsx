@@ -5,7 +5,7 @@ export const filterQueryContext = createContext({
     city: "",
     catagorie: "",
     tags: [""],
-    priceRange: "10-90",
+    priceRange: "0-0",
     sort: "",
     limit: 10,
   },
@@ -22,12 +22,12 @@ export default function EditorProvider({ children }: { children: any }) {
     limit: 10,
   });
   let [isLoad, isDataLoad] = useState(false);
-  useEffect(() => {
-    if (localStorage.getItem("filterQuery")) {
-      setFilterQuery(JSON.parse(localStorage.getItem("filterQuery") || ""));
-    }
-    isDataLoad(true);
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("filterQuery")) {
+  //     setFilterQuery(JSON.parse(localStorage.getItem("filterQuery") || ""));
+  //   }
+  //   isDataLoad(true);
+  // }, []);
 
   let stringQuery = (obj: any) => {
     let str = "";
@@ -58,63 +58,12 @@ export default function EditorProvider({ children }: { children: any }) {
 
     return "?" + arr.join("&");
   };
-  useEffect(() => {
-    let getTag = (tg: string) => {
-      if (!tg) return;
-      let btn: any = null;
-      document
-        .querySelectorAll("ul.tagsList li")
-        .forEach((e) => (e.textContent?.trim() == tg ? (btn = e) : false));
-      if (!btn) return;
-      btn.firstElementChild?.classList.add("checked");
-    };
-    let getCtg = (ctg: string) => {
-      document
-        .querySelectorAll(".ctgs button.active")
-        .forEach((el) => el.classList.remove("active"));
-      let btn: any = null;
-      document
-        .querySelectorAll(".ctgs button")
-        .forEach((e) =>
-          e.textContent?.toLowerCase() == ctg.toLowerCase() ? (btn = e) : false
-        );
-      if (btn) {
-        btn.className = "active";
-      }
-    };
-    let makeSort = (s: string) => {
-      if (!s) return;
-      let btn: any = null;
-      document
-        .querySelectorAll(".sortingList > button.active")
-        .forEach((el) => el.classList.remove("active"));
-      document
-        .querySelectorAll(".sortingList > button")
-        .forEach((e) => (e.textContent?.trim() == s ? (btn = e) : false));
 
-      if (!btn) return;
-      btn.classList.add("active");
-    };
-
-    if (filterQuery.catagorie) {
-      getCtg(filterQuery.catagorie);
-    }
-    if (filterQuery.tags) {
-      filterQuery.tags.forEach((el: string) => {
-        getTag(el);
-      });
-    }
-    if (filterQuery.sort) {
-      makeSort(filterQuery.sort);
-    }
-  }, []);
-
-  // get localstorage
-  useEffect(() => {
-    if (!isLoad) return;
-    localStorage.setItem("filterQuery", JSON.stringify(filterQuery));
-    console.log(stringQuery(filterQuery));
-  }, [filterQuery, isLoad]);
+  // // get localstorage
+  // useEffect(() => {
+  //   if (!isLoad) return;
+  //   localStorage.setItem("filterQuery", JSON.stringify(filterQuery));
+  // }, [filterQuery, isLoad]);
 
   useEffect(() => {
     if (!isLoad) return;
@@ -167,7 +116,7 @@ export default function EditorProvider({ children }: { children: any }) {
     if (filterQuery.sort) {
       makeSort(filterQuery.sort);
     }
-  }, [isLoad]);
+  }, []);
   return (
     <filterQueryContext.Provider value={{ filterQuery, setFilterQuery }}>
       {children}

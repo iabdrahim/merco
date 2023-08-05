@@ -1,7 +1,6 @@
 .search {
   h1 {
     font-size: 1.3rem;
-    margin-top: 1rem;
     font-weight: 500;
     text-transform: capitalize;
     @media not all and (min-width: 768px) {
@@ -38,7 +37,7 @@
     align-items: center;
     cursor: pointer;
     position: relative;
-    z-index: 20;
+    z-index: 8;
     &:hover {
       svg {
         box-shadow: 0px 0px 1px 8px rgba(0, 0, 0, 0.06);
@@ -58,6 +57,34 @@
     }
   }
   .resultes {
+    .query {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      .clear {
+        &.hidden {
+          display: none !important;
+        }
+        text-transform: capitalize;
+        background-color: #6300a3;
+        border-radius: 1vmin;
+        color: white;
+        display: flex;
+        padding: 0.1rem 0.5rem;
+        align-items: center;
+        gap: 0.2rem;
+      }
+      li {
+        background-color: white;
+        border: #eee 1.5px solid;
+        cursor: pointer;
+        padding: 0.2rem 0.5rem;
+        border-radius: 1vmin;
+        font-size: 1.03rem;
+        text-transform: capitalize;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0, 1);
+      }
+    }
     .dropdown {
       button.drop {
         align-items: center;
@@ -94,6 +121,7 @@
   aside {
     background-color: #fff;
     border: 1px solid #e8e8e8;
+    z-index: 2;
     border-radius: 6px;
     box-sizing: border-box;
     color: #2e054e;
@@ -115,6 +143,35 @@
       position: relative;
       min-height: fit-content;
       max-height: fit-content;
+    }
+    .avatarChanger {
+      .change {
+        display: none;
+        background-color: rgba(0, 0, 0, 0.411);
+        z-index: 20;
+        cursor: pointer;
+        position: relative;
+        svg {
+          z-index: 20;
+          position: relative;
+          color: white;
+        }
+      }
+      &:hover {
+        .change {
+          display: flex;
+        }
+      }
+    }
+    .editable {
+      input {
+        border: #cccbcb 1.5px solid;
+        padding: 0.2rem;
+        border-radius: 0.9vmin;
+      }
+      svg {
+        cursor: pointer;
+      }
     }
 
     .price {

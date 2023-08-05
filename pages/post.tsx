@@ -1,7 +1,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import {
   PiArmchairDuotone,
@@ -16,7 +16,7 @@ import {
 } from "react-icons/pi";
 import ALL from "../ALL.config";
 import Container from "../components/Container";
-import { useProfile } from "../utils/useApi";
+import { updater, useProfile } from "../utils/useApi";
 export const getServerSideProps = withPageAuthRequired();
 
 export default function Post() {
@@ -25,6 +25,7 @@ export default function Post() {
     catagorie: string;
     title: string;
     description: string;
+    details: { name: string; value: string }[];
     price: number;
     images: string[] | [];
     city: string;
@@ -32,10 +33,16 @@ export default function Post() {
     catagorie: "electronics",
     title: "",
     description: "",
+    details: [{ name: "", value: "" }],
     price: 0,
     images: ["", "", "", "", "", ""],
     city: "",
   });
+  let [userData, setUDate] = useState({
+    name: profile?.name || "",
+    phoneNumber: profile?.phoneNumber || 1,
+  });
+
   let onChangeCtg = (e: any) => {
     console.log(adData);
     document
@@ -99,9 +106,9 @@ export default function Post() {
   return (
     <div className="sell">
       <div className="back absolute left-4 top-4">
-        <Link href="/">
+        <button onClick={() => r.back()}>
           <PiArrowArcLeftDuotone size={24} />
-        </Link>
+        </button>
       </div>
       <Container className="flex justify-start items-center flex-col">
         <h2>Post an Ad</h2>
@@ -300,6 +307,62 @@ export default function Post() {
               </select>
             </div>
           </div>
+
+          <div className="More Info">
+            <h4>More Info</h4>
+            {adData.details.map((d, i) => (
+              <div className="flex justify-start gap-4 items-center" key={i}>
+                <input
+                  type="text"
+                  placeholder="state"
+                  value={d.name}
+                  onChange={(e) => {
+                    let newdata = adData.details;
+                    newdata[i].name = e.target.value;
+                    setData({ ...adData, details: newdata });
+                  }}
+                  name="name"
+                  className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-black focus:outline-none"
+                />
+
+                <input
+                  type="text"
+                  placeholder="good"
+                  value={d.name}
+                  onChange={(e) => {
+                    let newdata = adData.details;
+                    newdata[i].name = e.target.value;
+                    setData({ ...adData, details: newdata });
+                  }}
+                  name="title"
+                  className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-black focus:outline-none"
+                />
+                <div
+                  className="bg-red-400 text-white p-2 cursor-pointer rounded-xl"
+                  onClick={() =>
+                    setData({
+                      ...adData,
+                      details: adData.details.filter((el, ind) => ind != i),
+                    })
+                  }
+                >
+                  <AiOutlineDelete />
+                </div>
+              </div>
+            ))}
+            <div
+              className="up"
+              onClick={() =>
+                setData((prv) => ({
+                  ...prv,
+                  details: [...prv.details, { name: "", value: "" }],
+                }))
+              }
+            >
+              Add one
+            </div>
+          </div>
+
           <div className="_author">
             <h4>Rreview Your Details</h4>
             <div className="name flex gap-4 justify-start items-center flex-wrap">
@@ -320,6 +383,13 @@ export default function Post() {
                 <input
                   type="text"
                   placeholder="new name"
+                  onChange={(e) =>
+                    setUDate({
+                      ...userData,
+                      name: e.target.value,
+                    })
+                  }
+                  value={userData.name}
                   required
                   defaultValue={profile?.name}
                   className="mt-2 block w-full max-w-xs placeholder-gray-400/70 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-black focus:outline-none"
@@ -341,13 +411,25 @@ export default function Post() {
                     type="number"
                     placeholder="100"
                     name="number"
+                    onChange={(e) =>
+                      setUDate({
+                        ...userData,
+                        phoneNumber: Number(e.target.value),
+                      })
+                    }
+                    value={userData.phoneNumber}
                     defaultValue={profile?.phoneNumber}
                     className="block w-full max-w-xs rounded-l-none rtl:rounded-l-lg rtl:rounded-r-none placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border-2 border-gray-300 bg-white px-4 py-2.5 text-gray-700 focus:border-purple-400 focus:outline-none-purple-300"
                   />
                 </div>
               </div>
             </div>
-            <button className="up">update</button>
+            <div
+              className="up cursor-pointer"
+              onClick={() => updater("/users/profile", { ...userData })}
+            >
+              update
+            </div>
           </div>
           <button className="post" type="submit">
             post Now

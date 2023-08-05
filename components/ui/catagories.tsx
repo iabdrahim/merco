@@ -28,7 +28,7 @@ let catagories = [
 
 export default function Catagories() {
   const [X, setX] = useState<number>(0);
-  const [ctg, setctg] = useState("electonics");
+  const [ctg, setctg] = useState("electronics");
   let { ads, isLoading, error } = useSearch("?catagorie=" + ctg + "&limit=12");
   let { setFilterQuery } = useContext(filterQueryContext);
   let onChangeCtg = (e: any) => {
@@ -57,7 +57,7 @@ export default function Catagories() {
           style={{ transform: `translate(${X}px)` }}
         ></div>
         <button id="0" onClick={onChangeCtg} className="active">
-          electonics <PiComputerTowerDuotone />
+          electronics <PiComputerTowerDuotone />
         </button>
         <button id="1" onClick={onChangeCtg}>
           automobiles <PiCarSimpleDuotone />

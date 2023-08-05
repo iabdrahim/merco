@@ -1,15 +1,21 @@
-import React, { useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Cards from "../../components/cards";
-import Aside from "../../components/ui/aside";
-import { filterQueryContext } from "../../context/filter";
-import { useSearch } from "../../utils/useApi";
-import { PiArrowArcLeft } from "react-icons/pi";
+import { useAUser, useProfile, useSearch } from "../../utils/useApi";
+import { NextPageContext } from "next";
+import UserAside from "../../components/useraside";
+import { useRouter } from "next/router";
 
-export default function Ads() {
+export const getServerSideProps = (ctx: NextPageContext) => {
+  return { props: { id: ctx.query.id } };
+};
+
+export default function Ads({ id }: { id: string }) {
   const [DropDown, setDropDown] = useState(false);
-
-  let stringQuery = (obj: any): string => {
-    let str = "";
+  let { user, isLoading: isLoad, error: err } = useAUser(id);
+  let { profile } = useProfile();
+  const [Sort, setSort] = useState<string>("Newest");
+  let { ads, isLoading, error } = useSearch(`?userId=${id}&sort=${Sort}`);
+  let handleChangeSort = (e: any) => {
     let sortDec: any = {
       Oldest: "createdAt",
       Newest: "-createdAt",
@@ -17,91 +23,39 @@ export default function Ads() {
       Highestprice: "-price",
       Lowestprice: "price",
     };
-    let obs = Object.entries(obj);
-    for (let i: number = 0; i < obs.length; i++) {
-      let k = obs[i][0];
-      let v = obs[i][1] as string;
-      if (v) {
-        if (k == "sort") {
-          v = v.replaceAll(" ", "");
-          v = sortDec[v];
-        }
-        str += `${k}=${Array.isArray(v) ? v.join(",") : v}|`;
-      }
-    }
-    let arr = str.split("|");
-    arr = arr.filter((el) => el != "");
-
-    return "?" + arr.join("&");
-  };
-  let { filterQuery, setFilterQuery } = useContext(filterQueryContext);
-  let { ads, isLoading, error } = useSearch(stringQuery(filterQuery));
-  let handleChangeSort = (e: any) => {
     document
       .querySelectorAll(".sortingList > button.active")
       .forEach((el) => el.classList.remove("active"));
-    setFilterQuery((prv: {}) => ({
-      ...prv,
-      sort: (e.target as HTMLElement).textContent,
-    }));
+    let v = (e.target as HTMLElement).textContent || "";
+    v = v.replaceAll(" ", "");
+    v = sortDec[v];
+    setSort(v);
     e.target.classList.add("active");
   };
+  let r = useRouter();
+  useEffect(() => {
+    if (user?._id == profile?._id) {
+      r.push("/profile");
+    }
+  }, [profile, user]);
 
-  //filter queries
-  let getQueryArray = (obj: typeof filterQuery): any => {
-    let newObj = {};
-    Object.entries(obj).forEach((el) => {
-      if (!el[1]) return;
-      if (el[1] == "0-0") return;
-      if (el[0] == "sort") return;
-      if (el[0] == "limit") return;
-      if (Array.isArray(el[1]) && el[1].length == 0) return;
-      (newObj as any)[el[0]] = el[1];
-    });
-    return Object.entries(newObj);
-  };
+  if (!user) {
+    return "404 not found";
+  }
   return (
     <div className="search max-md:flex-col">
-      <Aside />
+      <UserAside user={user} />
       <div className="resultes w-full h-full">
         <div className="options px-2 w-full flex justify-between items-center gap-4">
           <div className="">
             <h1>{ads ? ads.length : "  "} Ad found</h1>
-            <ul className="query">
-              <button
-                className={`clear ${
-                  getQueryArray(filterQuery).length == 0 ? "hidden" : ""
-                }`}
-                onClick={() =>
-                  setFilterQuery({
-                    q: "",
-                    city: "",
-                    catagorie: "",
-                    tags: [],
-                    priceRange: "0-0",
-                    sort: "",
-                    limit: 10,
-                  })
-                }
-              >
-                <PiArrowArcLeft /> CLear All
-              </button>
-              {getQueryArray(filterQuery).map(
-                (f: any, i: number) =>
-                  f[1] && (
-                    <li key={i}>
-                      {f[0]}:<span className="ml-2">{f[1]}</span>
-                    </li>
-                  )
-              )}
-            </ul>
           </div>
           <div className="relative dropdown inline-block">
             <button
               onClick={() => setDropDown(!DropDown)}
               className="relative z-10 block drop"
             >
-              Sort By {filterQuery.sort || "newest"}
+              Sort By {Sort}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 stroke="#2e054e"

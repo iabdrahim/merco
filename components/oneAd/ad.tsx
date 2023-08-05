@@ -1,12 +1,30 @@
 import moment from "moment";
 import Link from "next/link";
 import React from "react";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiTwotoneDelete } from "react-icons/ai";
 import { IAd } from "../../utils/interfaces";
+import { deleter } from "../../utils/useApi";
 
-export default function Ad({ data }: { data: IAd }) {
+export default function Ad({
+  data,
+  hisposts,
+}: {
+  data: IAd;
+  hisposts?: boolean;
+}) {
+  let handleDelete = () => {
+    deleter("/api/ads", data._id);
+  };
   return (
-    <div className="card">
+    <div className="card relative">
+      {hisposts && (
+        <div
+          className="absolute right-2 p-1 bg-white rounded-full top-2"
+          onClick={handleDelete}
+        >
+          <AiTwotoneDelete size={20} />
+        </div>
+      )}
       <Link href={"/ads/" + data._id}>
         <div className="image">
           <img
@@ -21,7 +39,7 @@ export default function Ad({ data }: { data: IAd }) {
           <div className="flex gap-1 flex-col w-full">
             <h5>{data.title}</h5>
             <div className="flex justify-between items-center w-full">
-              <span>City</span>
+              <span>{data?.city}</span>
               <span>{moment(data.createdAt).fromNow()}</span>
             </div>
           </div>

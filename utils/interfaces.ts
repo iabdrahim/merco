@@ -8,6 +8,7 @@ export interface IUser {
   location: string;
   phoneNumber: string;
   saved: [string];
+  createdAt: Date;
 }
 export interface IAd {
   _id: string;
@@ -36,7 +37,6 @@ export interface IMessage {
   ];
   sellerId: string;
   createdAt: Date;
-
   buyerId: string;
   seller: IUser;
   buyer: IUser;

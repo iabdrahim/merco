@@ -39,7 +39,7 @@ export default function Navlinks() {
               {profile.avatar ? (
                 <img
                   src={profile?.avatar}
-                  className="cursor-pointer w-full h-full rounded-full hoverShadow"
+                  className="cursor-pointer w-full h-full rounded-full hoverShadow z-10"
                   alt="user avatar"
                 />
               ) : (
@@ -121,7 +121,7 @@ export default function Navlinks() {
             <FaUserCircle size={24} className="cursor-pointer" />
           </button>
           {isUserDrop && (
-            <div className="absolute right-0 top-12 z-20 w-56 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800 flex justify-start items-center flex-col">
+            <div className="absolute z-10 right-0 top-12 z-20 w-56 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800 flex justify-start items-center flex-col">
               <Link
                 href="/profile"
                 className="flex w-full items-center p-3 -mt-2 text-600 transition-colors duration-300:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 "

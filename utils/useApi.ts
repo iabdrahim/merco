@@ -1,29 +1,47 @@
 import useSWR from "swr";
-import ALL from "../ALL.config";
 import { IAd, IUser } from "./interfaces";
-import { useUser } from "@auth0/nextjs-auth0/client";
 
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
-const poster = (url: string, body: {}) => {
-  return fetch(url, {
+const updater = async (url: string, body: {}) => {
+  let data = await fetch(url, {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  }).catch((err) => err);
+  let r = await data.json();
+  return r;
+};
+const deleter = async (url: string, id: {}) => {
+  let data = await fetch(url + "/" + id, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  }).catch((err) => err);
+  let r = await data.json();
+  return r;
+};
+const poster = async (url: string, body: {}) => {
+  let data = await fetch(url, {
     method: "POST",
     body: JSON.stringify(body),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
-  })
-    .catch((err) => err)
-    .then((d) => d);
+  }).catch((err) => err);
+  let r = await data.json();
+  return r;
 };
 
-let API_URL = ALL.ApiEndPoint;
 function useAd(id: string | any) {
   const {
     data,
     error,
     isLoading,
   }: { data: IAd; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/ads/${id}`,
+    `/api/ads/${id}`,
     fetcher
   );
 
@@ -34,31 +52,13 @@ function useAd(id: string | any) {
   };
 }
 
-function setAd(body?: {}) {
-  if (!body) return;
-  let isLoading = true;
-  let error = null;
-  let res: any = poster(API_URL + "/ads", body);
-  res.catch((err: Error) => ((isLoading = false), (error = err)));
-  res.then((d: any) => d.json());
-  res.then((d: any) => {
-    isLoading = false;
-    return d;
-  });
-
-  return {
-    data: res,
-    isLoading,
-    error: error,
-  };
-}
 function useAds(query?: unknown) {
   const {
     data,
     error,
     isLoading,
   }: { data: IAd[]; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/ads${query ? "?" + query : ""}`,
+    `/api/ads${query ? "?" + query : ""}`,
     fetcher
   );
 
@@ -69,15 +69,21 @@ function useAds(query?: unknown) {
   };
 }
 function useProfile() {
-  const { user } = useUser();
   const {
     data,
     error,
     isLoading,
   }: { data: IUser; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/auth/profile?email=${user?.email}&picture=${user?.picture}`,
+    "/api/users/profile",
     fetcher
   );
+  if (!data) {
+    return {
+      profile: null,
+      isLoading: false,
+      error: null,
+    };
+  }
 
   return {
     profile: data,
@@ -92,7 +98,7 @@ function useAUser(id: unknown) {
     error,
     isLoading,
   }: { data: IUser; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/users/${id}`,
+    `/api/users/${id}`,
     fetcher
   );
 
@@ -109,7 +115,7 @@ function useSearch(queries?: string | any) {
     error,
     isLoading,
   }: { data: IAd[]; isLoading: boolean; error: undefined } = useSWR(
-    `${API_URL}/ads/search${queries ? queries : ""}`,
+    `/api/ads/search${queries ? queries : ""}`,
     fetcher
   );
 
@@ -119,4 +125,14 @@ function useSearch(queries?: string | any) {
     error: error,
   };
 }
-export { useAd, useAds, useSearch, useAUser, useProfile, setAd, fetcher };
+export {
+  fetcher,
+  poster,
+  updater,
+  useAUser,
+  useAd,
+  deleter,
+  useAds,
+  useProfile,
+  useSearch,
+};

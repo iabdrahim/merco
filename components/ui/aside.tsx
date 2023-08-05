@@ -90,7 +90,7 @@ export default function Aside() {
             all <PiFolderNotchOpenDuotone />
           </button>
           <button onClick={onChangeCtg}>
-            electonics <PiComputerTowerDuotone />
+            electronics <PiComputerTowerDuotone />
           </button>
           <button onClick={onChangeCtg}>
             jobs
@@ -145,6 +145,7 @@ export default function Aside() {
             <input
               type="number"
               className="w-full h-full"
+              min={0}
               value={filterQuery.priceRange.split("-")[0]}
               onChange={(e) =>
                 setFilterQuery((prv: typeof filterQuery) => ({
@@ -159,6 +160,7 @@ export default function Aside() {
             <label htmlFor="">max</label>
             <input
               type="number"
+              min={0}
               className="w-full h-full"
               value={filterQuery.priceRange.split("-")[1]}
               onChange={(e) =>
