@@ -3,9 +3,35 @@ import React, { useEffect, useState } from "react";
 // import { ToastContainer } from "react-toastify";
 import Nav from "./nav";
 import Footer from "./footer";
+import Container from "./Container";
+import Spinner from "./ui/spinner";
 export default function Layout({ children }: { children: any }) {
   let r = useRouter();
-  let noNavAndFooter = ["/post"];
+  let noNavAndFooter = ["/post", "/chats"];
+  const [loading, setLoading] = useState(false);
+  let router = useRouter();
+  useEffect(() => {
+    const handleStart = (url: string) =>
+      url !== router.asPath && setLoading(true);
+    const handleComplete = (url: string) => setLoading(false);
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router.events]);
+  if (loading) {
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
+  }
   return (
     <>
       {!noNavAndFooter.some((el) => el == r.asPath) && <Nav />}

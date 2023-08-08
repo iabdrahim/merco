@@ -1,19 +1,38 @@
 import moment from "moment";
 import Link from "next/link";
-import React from "react";
-import { AiOutlineHeart, AiTwotoneDelete } from "react-icons/ai";
-import { IAd } from "../../utils/interfaces";
-import { deleter } from "../../utils/useApi";
+import React, { MouseEventHandler } from "react";
+import { AiOutlineHeart, AiTwotoneDelete, AiFillHeart } from "react-icons/ai";
+import { IAd, IUser } from "../../utils/interfaces";
+import { deleter, updater } from "../../utils/useApi";
 
 export default function Ad({
   data,
   hisposts,
+  profile,
 }: {
   data: IAd;
   hisposts?: boolean;
+  profile: IUser | null;
 }) {
   let handleDelete = () => {
     deleter("/api/ads", data._id);
+  };
+  let handleLike = (e: any) => {
+    if (!profile?.saved) return;
+    if (profile?.saved?.filter((a) => a == data._id).length == 0) {
+      e.target.classList.add("like");
+      e.target.classList.remove("liked");
+
+      updater("/api/users/profile", {
+        saved: [...profile?.saved, data._id],
+      });
+    } else {
+      e.target.classList.add("liked");
+      e.target.classList.remove("like");
+      updater("/api/users/profile", {
+        saved: profile?.saved.filter((el) => el != data._id),
+      });
+    }
   };
   return (
     <div className="card relative">
@@ -45,8 +64,17 @@ export default function Ad({
           </div>
         </Link>
         <div className="top-3 right-3 absolute">
-          <button className="hoverShadow rounded-full">
-            <AiOutlineHeart size={24} />
+          <button
+            className={`hoverShadow rounded-full ${
+              profile?.saved?.some((a) => a == data._id) ? "liked" : "like"
+            }`}
+            onClick={handleLike}
+          >
+            {profile?.saved?.some((a) => a == data._id) ? (
+              <AiFillHeart size={24} />
+            ) : (
+              <AiOutlineHeart size={24} />
+            )}
           </button>
         </div>
       </div>

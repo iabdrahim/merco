@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {
-  deleteMessage,
+  deleteChat,
   getChat,
   updateChat,
-} from "../../../components/apiControllers/messages";
+} from "../../../components/apiControllers/chats";
 import connect from "../../../lib/database";
 
 export default async function HANDLER(
@@ -17,9 +17,9 @@ export default async function HANDLER(
     } else if (req.method == "PUT") {
       await updateChat(req, res);
     } else if (req.method == "DELETE") {
-      await deleteMessage(req, res);
+      await deleteChat(req, res);
     } else {
-      res.status(402).send("this method is not allows");
+      res.status(402).send("this method is not allowd");
     }
   } catch (err: any) {
     res.status(500).send(err.message);

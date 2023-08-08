@@ -1,8 +1,10 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiImageAdd, BiXCircle } from "react-icons/bi";
+import { IoClose } from "react-icons/io5";
 import {
   PiArmchairDuotone,
   PiArrowArcLeftDuotone,
@@ -16,6 +18,7 @@ import {
 } from "react-icons/pi";
 import ALL from "../ALL.config";
 import Container from "../components/Container";
+import Icon from "../components/icon";
 import { updater, useProfile } from "../utils/useApi";
 export const getServerSideProps = withPageAuthRequired();
 
@@ -42,6 +45,7 @@ export default function Post() {
     name: profile?.name || "",
     phoneNumber: profile?.phoneNumber || 1,
   });
+  let [showMessage, setMessage] = useState(false);
 
   let onChangeCtg = (e: any) => {
     console.log(adData);
@@ -56,6 +60,7 @@ export default function Post() {
   };
   let postAd = async (e: any) => {
     e.preventDefault();
+    if (!profile?._id) setMessage(true);
     adData.images = adData.images.filter((el) => el != "");
     if (!adData.images) {
       return;
@@ -431,6 +436,32 @@ export default function Post() {
               update
             </div>
           </div>
+          {showMessage && (
+            <div className="loginCard">
+              <div className="bg" onClick={() => setMessage(false)}></div>
+              <div className="card">
+                <div
+                  className="absolute right-4 top-4 hoverShadow rounded-full cursor-pointer boxshadow-2"
+                  onClick={() => setMessage(false)}
+                >
+                  <IoClose size={24} className="pointer-events-none" />
+                </div>
+                <div className="icon w-full flex justify-center items-center">
+                  <Icon />
+                </div>
+                <h4>please Login In</h4>
+                <p>
+                  You should be logged in for sending messages an saving ads
+                </p>
+                <Link
+                  href="/api/auth/login"
+                  className="post flex gap-2 items-center justify-center mt-4"
+                >
+                  Login In
+                </Link>
+              </div>
+            </div>
+          )}
           <button className="post" type="submit">
             post Now
           </button>

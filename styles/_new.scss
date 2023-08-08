@@ -66,7 +66,7 @@
           display: none !important;
         }
         text-transform: capitalize;
-        background-color: #6300a3;
+        background-color: $primary;
         border-radius: 1vmin;
         color: white;
         display: flex;
@@ -112,7 +112,7 @@
             background-color: rgba(99, 0, 163, 0.06);
           }
           &.active {
-            color: rgb(99, 0, 163);
+            color: $primary;
           }
         }
       }
@@ -124,7 +124,7 @@
     z-index: 2;
     border-radius: 6px;
     box-sizing: border-box;
-    color: #2e054e;
+    color: $text;
     display: flex;
     flex-direction: column;
     max-height: 100%;
@@ -204,7 +204,7 @@
       span.checkbox {
         align-self: baseline;
         margin: auto 0px;
-        border: 2px solid #6300a3;
+        border: 2px solid $primary;
         border-radius: 2px;
         width: 1.45rem;
         height: 1.4rem;
@@ -230,7 +230,7 @@
           color: white;
         }
         &.checked {
-          background-color: #6300a3;
+          background-color: $primary;
         }
       }
     }

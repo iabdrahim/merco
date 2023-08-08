@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 let { models, model, Schema } = mongoose;
 let UserSchema = new Schema(
   {
-    name: { type: String, default: "no name" },
-    password: String,
+    name: { type: String, default: "unknown" },
     email: {
       type: String,
+      required: [true, "email must be provided"],
       unique: [true, "This email is aleardy exist with another account"],
     },
     avatar: { type: String, default: "/user.png" },

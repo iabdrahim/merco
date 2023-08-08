@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {
-  addMessage,
+  addChat,
   getUserChats,
-} from "../../../components/apiControllers/messages";
+} from "../../../components/apiControllers/chats";
 import connect from "../../../lib/database";
 
 export default async function HANDLER(
@@ -14,7 +14,7 @@ export default async function HANDLER(
     if (req.method == "GET") {
       await getUserChats(req, res);
     } else if (req.method == "POST") {
-      await addMessage(req, res);
+      await addChat(req, res);
     } else {
       res.status(402).send("this method is not allows");
     }

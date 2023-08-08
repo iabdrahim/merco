@@ -15,7 +15,7 @@ const AdSchema = new Schema(
     details: [{ name: String, value: String }],
     description: {
       type: String,
-      minlength: [100, "ad description must be more than 100 characters"],
+      minlength: [10, "ad description must be more than 10 characters"],
     },
     catagorie: {
       type: String,
@@ -26,7 +26,7 @@ const AdSchema = new Schema(
           "fashion",
           "others",
           "jobs",
-          "real estate",
+          "estate",
           "entertainment",
           "lifestyle",
         ],
@@ -34,12 +34,11 @@ const AdSchema = new Schema(
       },
     },
     images: [String],
-    authorId: {
-      type: String,
-      required: [true, "this userId is not valid"],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "author is required"],
     },
-    author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    // rating: { type: Number, default: 4.5 },
     tags: [String],
   },
   {
@@ -47,7 +46,6 @@ const AdSchema = new Schema(
     timestamps: true, // Enable createdAt and updatedAt fields
   }
 );
-// delete models.Ad;
 
 let Ad = models.Ad;
 if (!Ad) {

@@ -1,9 +1,9 @@
 const ALL = {
-  title: "store",
+  title: "Merco",
   author: "Abderrahim",
   link: "https://merco.vercel.app",
   email: "abderrahimaneddam1@gmail.com",
-  description: "this is a store",
+  description: "Merco is buy and sell platform on morocco",
   lang: "ar-EG", // ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP', 'es-ES']
   timezone: "egypt/kahera", // See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for all options.
   appearance: "auto", // ['light', 'dark', 'auto'],

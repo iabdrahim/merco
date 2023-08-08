@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 let { Schema, models, model } = mongoose;
-const MessageSchema = new Schema(
+const ChatSchema = new Schema(
   {
     messages: [
       {
@@ -9,8 +9,6 @@ const MessageSchema = new Schema(
         createdAt: { type: Date, default: Date.now() },
       },
     ],
-    sellerId: String,
-    buyerId: String,
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     buyer: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
@@ -19,10 +17,10 @@ const MessageSchema = new Schema(
     timestamps: true, // Enable createdAt and updatedAt fields
   }
 );
-// delete models.Message;
+delete models.Message;
 
-let Message = models.Message;
-if (!Message) {
-  Message = model("Message", MessageSchema);
+let Chat = models.Chat;
+if (!Chat) {
+  Chat = model("Chat", ChatSchema);
 }
-export default Message;
+export default Chat;

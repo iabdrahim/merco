@@ -2,7 +2,7 @@
   h2 {
     font-size: 1.3rem;
     align-items: center;
-    color: #2e054e;
+    color: $text;
     text-transform: capitalize;
     display: flex;
     width: 100%;
@@ -85,11 +85,11 @@
         font-size: 1.1rem;
         font-weight: 500;
         margin-bottom: 0.5rem;
-        color: #2e054e;
+        color: $text;
         text-transform: capitalize;
       }
       label {
-        color: #2e054e;
+        color: $text;
         font-size: 1.05rem;
         margin: 0.3rem 0px;
       }
@@ -105,7 +105,7 @@
     margin-bottom: 2rem;
     color: white;
     font-size: 1.2rem;
-    background-color: #ed264f;
+    background-color: $primary;
   }
   .up {
     border-radius: 1vmin;
@@ -120,6 +120,6 @@
     align-items: center;
     color: white;
     font-size: 1rem;
-    background-color: #2e054e;
+    background-color: $accent;
   }
 }

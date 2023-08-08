@@ -26,18 +26,17 @@ export interface IAd {
   rating: number;
 }
 
-export interface IMessage {
+export interface IChat {
   _id: string;
   messages: [
     {
+      _id: string;
       userId: string;
       content: string;
       createdAt: Date;
     }
   ];
-  sellerId: string;
   createdAt: Date;
-  buyerId: string;
   seller: IUser;
   buyer: IUser;
 }

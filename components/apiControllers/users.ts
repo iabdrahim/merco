@@ -5,18 +5,6 @@ import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 let getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     let { page, perpage, email } = req.query;
-    if (email) {
-      let user;
-      try {
-        user = await User.findOne({ email });
-      } catch (err) {
-        return res.status(404).send("no user found");
-      }
-      if (!user) {
-        return res.status(404).send("no user found");
-      }
-      return res.status(200).send(user);
-    }
     let pg = +(page || 1); // Current page number
     let pageSize = +(perpage || 10); // Number of results per page
     let users = await User.find({}, "name email avatar")
@@ -32,11 +20,14 @@ let getUser = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     let id = req.query.id;
     if (!id) {
-      return res.status(401).send("user d is not valid");
+      return res.status(401).send("user id is not valid");
     }
     let user;
     try {
-      user = await User.findOne({ _id: id });
+      user = await User.findOne(
+        { _id: id },
+        "phoneNumber name createdAt location avatar"
+      );
     } catch (err) {
       return res.status(404).send("no user found");
     }
@@ -83,7 +74,7 @@ let deleteCurUser = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -111,7 +102,7 @@ let updateCurUser = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -124,18 +115,15 @@ let updateCurUser = withApiAuthRequired(
       try {
         upuser = await User.findOneAndUpdate(
           { _id: userInDb._id },
-          { $set: updatedData },
-          {
-            runValidators: true,
-          }
+          { $set: updatedData }
         );
       } catch (err) {
         return res.status(404).send(err);
       }
       if (!upuser) {
-        return res.status(404).send("user not found");
+        return res.status(404).send("This user is not exist");
       }
-      return res.status(200).send("user updated successfully");
+      return res.status(200).send("user is  updated successfully");
     } catch (err: any) {
       return res.status(500).send(err.message);
     }

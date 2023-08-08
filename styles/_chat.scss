@@ -1,0 +1,136 @@
+.chat {
+  aside {
+    background-color: #fff;
+    z-index: 2;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: $text;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: fit-content;
+    min-height: 100vh;
+    width: 20rem;
+    padding: 1rem;
+    @media not all and (min-width: 768px) {
+      height: fit-content;
+      width: 100%;
+      min-height: 0px;
+      padding: 0.5rem;
+      .chats {
+        flex-direction: row;
+        overflow: auto;
+        .chat {
+          flex-direction: column;
+        }
+      }
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-top: 1rem;
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    gap: 1rem;
+    div.chat {
+      width: 100%;
+      border-radius: 1vmin;
+      background-color: #f3f2f2af;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      gap: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      img {
+        border-radius: 100%;
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+  }
+  main {
+    border-radius: 1vmin;
+    background-color: #fdfdfd;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px black solid;
+      border-radius: 60px;
+      background-color: white;
+      height: 3.3rem;
+      padding: 0.25rem 1rem;
+      button {
+        background-color: black;
+        height: 100%;
+        padding: 0rem 1.5rem;
+        border-radius: 50px;
+        color: white;
+      }
+      input {
+        outline: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 1.07rem;
+      }
+    }
+    .msgs {
+      padding: 0.5rem 1rem;
+      width: 100%;
+      height: 100%;
+      min-height: 70vh;
+      max-height: 70vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow: auto;
+      > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-bottom: 0.2rem;
+        .msg {
+          border-radius: 1vmin;
+          position: relative;
+          min-width: 10rem;
+          padding: 0.6rem 0.6rem;
+          border: 1.5px solid #fafafa;
+          font-size: 1.1rem;
+          // background-color: #f3f2f2af;
+          background-color: $secondary;
+          color: black;
+          span {
+            color: rgb(161, 161, 161);
+            position: absolute;
+            bottom: -1.2rem;
+            font-size: 0.9rem;
+            right: 0px;
+          }
+        }
+        &.hisMsg {
+          justify-content: flex-end;
+          .msg {
+            background-color: #fae4cb;
+            color: black;
+          }
+        }
+      }
+    }
+  }
+}

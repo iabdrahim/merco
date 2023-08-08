@@ -70,7 +70,6 @@ export default function Navlinks() {
                   className="flex w-full items-center justify-start p-3 text-sm capitalize transition-colors transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 min-md:hidden"
                 >
                   <FiPlus size={20} />
-
                   <span className="mx-1">Sell</span>
                 </Link>
                 <Link
@@ -91,7 +90,7 @@ export default function Navlinks() {
                 </Link>
                 <hr className="border-gray-200 dark:border-gray-700 " />
                 <Link
-                  href="/chat"
+                  href="/chats"
                   className="flex w-full items-center justify-start p-3 text-sm capitalize transition-colors transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 "
                 >
                   <PiChatCircleDuotone size={20} />

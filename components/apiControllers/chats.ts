@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Message from "../../models/message";
+import Message from "../../models/chat";
 import User from "../../models/user";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
@@ -11,25 +11,25 @@ let getUserChats = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
-      let msg;
+      let msgs;
       try {
-        msg = await Message.find({
-          $or: [{ sellerId: userInDb._id }, { buyerId: userInDb._id }],
-        }).select({
-          seller: { name: 1, avatar: 1 },
-          buyer: { name: 1, avatar: 1 },
-        });
+        msgs = await Message.find({
+          $or: [{ seller: userInDb._id }, { buyer: userInDb._id }],
+        })
+          .populate("seller", "name avatar _id phoneNumber")
+          .populate("buyer", "name avatar _id phoneNumber")
+          .select({
+            createdAt: 1,
+          });
       } catch (err) {
-        return res.status(404).send("nothing found");
+        return res.status(404).send("This chat is not longer exist");
       }
-      if (!msg) {
-        return res.status(404).send("nothing found");
-      }
-      return res.status(200).send(msg);
+
+      return res.status(200).send(msgs);
     } catch (err: any) {
       return res.status(500).send(err.message);
     }
@@ -45,7 +45,7 @@ let getChat = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -54,13 +54,16 @@ let getChat = withApiAuthRequired(
       try {
         msg = await Message.findOne({
           _id: chatId,
-          $or: [{ sellerId: userInDb._id }, { buyerId: userInDb._id }],
-        }).select("seller buyer messages createdAt");
+          $or: [{ seller: userInDb._id }, { buyer: userInDb._id }],
+        })
+          .populate("seller", "name avatar _id phoneNumber")
+          .populate("buyer", "name avatar _id phoneNumber")
+          .select({
+            createdAt: 1,
+            messages: 1,
+          });
       } catch (err) {
-        return res.status(404).send("nothing found");
-      }
-      if (!msg) {
-        return res.status(404).send("nothing found");
+        return res.status(404).send("This chat is not found");
       }
       return res.status(200).send(msg);
     } catch (err: any) {
@@ -76,7 +79,7 @@ let updateChat = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -87,16 +90,13 @@ let updateChat = withApiAuthRequired(
         msg = await Message.findByIdAndUpdate(
           {
             _id: chatId,
-            $or: [{ sellerId: userInDb._id }, { buyerId: userInDb._id }],
           },
-          { $set: { ...updateData } }
+          { $set: updateData }
         );
-      } catch (err) {
-        return res.status(404).send("nothing found");
+      } catch (err: any) {
+        return res.status(404).send(err.message);
       }
-      if (!msg) {
-        return res.status(404).send("nothing found");
-      }
+
       return res.status(200).send(msg);
     } catch (err: any) {
       return res.status(500).send(err.message);
@@ -104,7 +104,7 @@ let updateChat = withApiAuthRequired(
   }
 );
 
-let addMessage = withApiAuthRequired(
+let addChat = withApiAuthRequired(
   async (req: NextApiRequest, res: NextApiResponse) => {
     let session = await getSession(req, res);
     let user = session?.user;
@@ -112,7 +112,7 @@ let addMessage = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -122,7 +122,6 @@ let addMessage = withApiAuthRequired(
       }
       let newMessage = await Message.create({
         ...MessageData,
-        buyerId: userInDb._id,
         buyer: userInDb._id,
       });
       return res.status(200).send(newMessage);
@@ -131,7 +130,7 @@ let addMessage = withApiAuthRequired(
     }
   }
 );
-let deleteMessage = withApiAuthRequired(
+let deleteChat = withApiAuthRequired(
   async (req: NextApiRequest, res: NextApiResponse) => {
     let session = await getSession(req, res);
     let user = session?.user;
@@ -139,7 +138,7 @@ let deleteMessage = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -150,7 +149,7 @@ let deleteMessage = withApiAuthRequired(
       try {
         await Message.findOneAndDelete({
           _id: id,
-          $or: [{ sellerId: userInDb._id }, { buyerId: userInDb._id }],
+          $or: [{ seller: userInDb._id }, { buyer: userInDb._id }],
         });
       } catch (err) {
         return res.status(404).send(err);
@@ -162,4 +161,4 @@ let deleteMessage = withApiAuthRequired(
   }
 );
 
-export { addMessage, deleteMessage, getChat, getUserChats, updateChat };
+export { addChat, deleteChat, getChat, getUserChats, updateChat };

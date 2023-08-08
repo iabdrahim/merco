@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { IAd, IUser } from "./interfaces";
+import { IAd, IChat, IUser } from "./interfaces";
 
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 const updater = async (url: string, body: {}) => {
@@ -13,7 +13,7 @@ const updater = async (url: string, body: {}) => {
   let r = await data.json();
   return r;
 };
-const deleter = async (url: string, id: {}) => {
+const deleter = async (url: string, id: string | undefined) => {
   let data = await fetch(url + "/" + id, {
     method: "DELETE",
     headers: {
@@ -46,7 +46,7 @@ function useAd(id: string | any) {
   );
 
   return {
-    ad: data,
+    ad: data?._id ? data : null,
     isLoading,
     error: error,
   };
@@ -77,7 +77,7 @@ function useProfile() {
     "/api/users/profile",
     fetcher
   );
-  if (!data) {
+  if (!data || error) {
     return {
       profile: null,
       isLoading: false,
@@ -86,7 +86,7 @@ function useProfile() {
   }
 
   return {
-    profile: data,
+    profile: data?._id ? data : null,
     isLoading: isLoading,
     error: error,
   };
@@ -103,7 +103,7 @@ function useAUser(id: unknown) {
   );
 
   return {
-    user: data,
+    user: data?._id ? data : null,
     isLoading,
     error: error,
   };
@@ -125,6 +125,42 @@ function useSearch(queries?: string | any) {
     error: error,
   };
 }
+
+function useChats() {
+  const {
+    data,
+    error,
+    isLoading,
+  }: { data: IChat[]; isLoading: boolean; error: undefined } = useSWR(
+    `/api/chats`,
+    fetcher
+  );
+
+  return {
+    chats: data,
+    isLoading,
+    error: error,
+  };
+}
+
+function useChat(id: string | null) {
+  const {
+    data,
+    mutate,
+    isLoading,
+  }: {
+    data: IChat;
+    isLoading: boolean;
+    mutate: (v: any) => void;
+  } = useSWR(`/api/chats/${id}`, fetcher);
+
+  return {
+    chat: data?._id ? data : null,
+    isLoading,
+    mutate,
+  };
+}
+
 export {
   fetcher,
   poster,
@@ -132,6 +168,8 @@ export {
   useAUser,
   useAd,
   deleter,
+  useChats,
+  useChat,
   useAds,
   useProfile,
   useSearch,

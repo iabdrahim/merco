@@ -11,16 +11,22 @@
   color-scheme: light;
 }
 
-$mb: "max-width: 480px";
-$md: "max-width: 800px";
-$lg: "max-width: 1024px";
+$text: #170202;
+$background: #ffffff;
+$primary: #0d7d7d;
+$secondary: #fac3c3;
+$accent: #17dada;
+
 html,
 body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
   margin: 0;
-  background-color: white;
+  background-color: $background;
+  color: $text;
+  scroll-behavior: smooth;
+  // color: rgb(95, 67, 117);
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-family: "Futura PT", sans-serif;
@@ -61,20 +67,17 @@ html::-webkit-scrollbar-thumb {
 html::-webkit-scrollbar-thumb {
   background-color: var(--thumbBG);
 }
-// colors
-:root {
-  --pc: #0f766e;
-}
 
 ::selection {
-  background: var(--pc);
+  background: var(--primary);
   color: white;
 }
 .minHiegth {
-  min-height: 60vh;
+  min-height: 85vh;
 }
 @import "./home";
 @import "./auth";
 @import "./new";
 @import "./post";
 @import "./sell";
+@import "./chat";

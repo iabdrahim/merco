@@ -1,47 +1,20 @@
 import Layout from "../components/layout";
 import "../styles/globals.scss";
 // import "react-toastify/dist/ReactToastify.css";
-import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
-import FilterQueryContext from "../context/filter";
-import { useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import FilterQueryContext from "../context/filter";
 // import "moment/locale/ar";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import NextProgress from "next-progress";
 import ALL from "../ALL.config";
 import * as gtag from "../lib/gtag";
-import NextProgress from "next-progress";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
-
-const variants = {
-  in: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.25,
-      delay: 0.25,
-    },
-  },
-  out: {
-    opacity: 0,
-    scale: 1,
-    y: 40,
-    transition: {
-      duration: 0.25,
-    },
-  },
-};
-/*
- * Read the ALL post here:
- * https://letsbuildui.dev/articles/animated-page-transitions-in-nextjs
- */
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  const { asPath } = useRouter();
   // useEffect(() => {
   //   document.body.className = "bg-day dark:bg-night";
   //   document.querySelector(":root")?.setAttribute("lang", "ar");
@@ -63,26 +36,11 @@ export default function App({
       <UserProvider>
         <FilterQueryContext>
           <Layout>
-            <AnimatePresence
-              initial={false}
-              mode="wait"
-              onExitComplete={() => window.scrollTo(0, 0)}
-            >
-              <NextProgress
-                color={"#000"}
-                options={{ showSpinner: ALL.showLoadingSpinner }}
-              />
-              <motion.div
-                key={asPath}
-                className="minHeightContainer"
-                variants={variants}
-                animate="in"
-                initial="out"
-                exit="out"
-              >
-                <Component {...pageProps} />
-              </motion.div>
-            </AnimatePresence>
+            <NextProgress
+              color={"#000"}
+              options={{ showSpinner: ALL.showLoadingSpinner }}
+            />
+            <Component {...pageProps} />
           </Layout>
         </FilterQueryContext>
       </UserProvider>

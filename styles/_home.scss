@@ -1,7 +1,3 @@
-body {
-  scroll-behavior: smooth;
-  color: rgb(95, 67, 117);
-}
 nav {
   font-size: 1rem;
   border-bottom: 2px solid #f2f3f5;
@@ -112,7 +108,7 @@ nav {
     //   min-width: 4rem;
     // }
     svg {
-      color: #210e36;
+      color: $primary;
     }
   }
 }
@@ -154,12 +150,12 @@ nav {
     svg {
       width: 1.8rem;
       height: 1.8rem;
-      color: #6300a3;
+      color: $primary;
       pointer-events: none;
     }
     &.active {
       color: white;
-      background-color: #6300a3;
+      background-color: $primary;
       svg {
         color: white;
       }
@@ -276,7 +272,7 @@ nav {
   }
 }
 h3.noline {
-  color: #2e054e;
+  color: $text;
   text-transform: capitalize;
   width: 100%;
   font-weight: 500;
@@ -287,7 +283,7 @@ h3.noline {
 }
 button.loadMore {
   margin: 0px auto;
-  background-color: #2e054e;
+  background-color: $accent;
   width: 8rem;
   height: 2.5rem;
   color: white;
@@ -295,7 +291,7 @@ button.loadMore {
 }
 h3.subHeading {
   align-items: center;
-  color: #2e054e;
+  color: $text;
   text-transform: capitalize;
   display: flex;
   width: 100%;
@@ -342,12 +338,12 @@ section {
       white-space: nowrap;
       width: 175px;
       &.active {
-        background-color: hsl(276, 100%, 32%);
+        background-color: $primary;
         color: #fff;
-        border-color: #6300a3;
+        border-color: $primary;
       }
       &:hover {
-        border-color: #6300a3;
+        border-color: $primary;
       }
     }
   }
@@ -355,7 +351,7 @@ section {
 main.ads {
   display: grid;
   overflow: hidden;
-  padding: 1rem;
+  padding: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   gap: 2rem 1rem;
@@ -367,11 +363,9 @@ main.ads {
     grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
   }
   width: 100%;
-
   .card {
     border: 1px solid #e8e8e8;
     border-radius: 12px;
-    // margin-right: 16px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0, 1);
     cursor: pointer;
     overflow: hidden;
@@ -397,11 +391,18 @@ main.ads {
         color: black;
         font-size: 1.05rem;
       }
+      .liked {
+        border-radius: 100%;
+        padding: 0.1rem;
+        svg {
+          color: rgb(237, 38, 79);
+        }
+      }
       strong {
         font-size: 21px;
         line-height: 24px;
         font-weight: 500;
-        color: #2e054e;
+        color: $text;
         span {
           font-weight: 400;
           font-size: 1rem;
@@ -412,14 +413,10 @@ main.ads {
   }
 }
 button.bigBtn {
-  --color: rgb(237, 38, 79);
-  &.purple {
-    --color: #6300a3;
-  }
+  background-color: $primary;
   white-space: nowrap;
   transition: all 0.25s cubic-bezier(0.4, 0, 0, 1);
   color: white;
-  background-color: var(--color);
   &:hover {
     opacity: 0.9;
   }
@@ -439,11 +436,12 @@ button.bigBtn {
   &.outlined {
     border: solid 2px;
     font-weight: 500;
-    border-color: var(--color);
+    border-color: $primary;
     background-color: transparent;
-    color: var(--color);
+    color: $primary;
     &:hover {
-      background-color: #6200a321;
+      background-color: $primary;
+      color: white;
     }
   }
 }
@@ -469,7 +467,7 @@ section > .ctgs {
     width: 100%;
   }
   .traker {
-    background-color: #6300a3;
+    background-color: $primary;
     font-weight: 500;
     height: 4.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0, 1);
@@ -501,13 +499,13 @@ section > .ctgs {
     background-color: transparent;
     svg {
       width: 2rem;
-      color: #6300a3;
+      color: $primary;
       pointer-events: none;
       height: 2rem;
     }
     &.active {
       color: white;
-      background-color: #6300a3;
+      background-color: $primary;
 
       svg {
         color: white;
@@ -538,9 +536,57 @@ section.howitwork {
 }
 
 footer {
-  background-color: #2e054e;
-  color: white;
+  background-color: $secondary;
+  color: $text;
   > svg {
-    color: #2e054e;
+    color: $secondary;
+  }
+}
+
+.spinner {
+  animation: rotate 2s linear infinite;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -25px 0 0 -25px;
+  width: 50px;
+  height: 50px;
+
+  & .path {
+    stroke: $primary;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+.liked {
+  border-radius: 100%;
+  padding: 0.1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0, 1);
+  svg {
+    transform: scale(1.1);
+    color: rgb(237, 38, 79);
   }
 }

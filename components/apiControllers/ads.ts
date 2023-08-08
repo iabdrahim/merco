@@ -6,7 +6,7 @@ import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 
 let getAds = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    let { q, fields, page, perpage } = req.query;
+    let { fields, page, perpage } = req.query;
 
     let pg = +(page || 1); // Current page number
     let pageSize = +(perpage || 12); // Number of results per page
@@ -18,9 +18,7 @@ let getAds = async (req: NextApiRequest, res: NextApiResponse) => {
       let fieldsList = (fields as string).split(",").join(" ");
       ads = ads.select(fieldsList);
     }
-    if (q) {
-      ads = ads.find({ title: { $regex: q, $option: "i" } });
-    }
+
     let resultes = await ads;
     return res.status(200).send(resultes);
   } catch (err: any) {
@@ -41,6 +39,7 @@ let searchAds = async (req: NextApiRequest, res: NextApiResponse) => {
       priceRange,
       city,
       userId,
+      ids,
     } = req.query;
     let pg = Number(page) || 1; // Current page number
     let pageLen = +(perpage || 12); // Number of results per page
@@ -56,6 +55,11 @@ let searchAds = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     if (city) {
       queryObject.city = city;
+    }
+    if (ids) {
+      let idis = (ids as string).split(",");
+      let ads = await Ad.find({ _id: { $in: idis } });
+      return res.status(200).send(ads);
     }
     let ads = Ad.find(queryObject)
       .skip((pg - 1) * pageLen)
@@ -75,6 +79,7 @@ let searchAds = async (req: NextApiRequest, res: NextApiResponse) => {
       let tagsList = (tags as string).split(",");
       ads = ads.where("tags").in(tagsList);
     }
+
     if (fields) {
       let fieldsList = (fields as string).split(",").join(" ");
       ads = ads.select(fieldsList);
@@ -89,11 +94,14 @@ let getAd = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     let { id } = req.query;
     if (!id) {
-      return res.status(402).send("the ad id is required");
+      return res.status(402).send("The ad id is required");
     }
     let ad;
     try {
-      ad = await Ad.findOne({ _id: id }).populate("author");
+      ad = await Ad.findOne({ _id: id }).populate(
+        "author",
+        "phoneNumber name _id avatar location"
+      );
     } catch (err) {
       return res.status(404).send("this ad is not found");
     }
@@ -114,7 +122,7 @@ let addAd = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -130,7 +138,6 @@ let addAd = withApiAuthRequired(
       }
       let newAd = new Ad({
         ...AdData,
-        authorId: userInDb._id,
         author: userInDb._id,
       });
       await newAd.save();
@@ -177,7 +184,7 @@ let updateAd = withApiAuthRequired(
       return res.status(400).send("you are not authenticated");
     }
     try {
-      let userInDb = await User.findOne({ email: user.email });
+      let userInDb = await User.findOne({ email: user.email }, "email");
       if (!userInDb) {
         return res.status(402).send("this user is not in the database");
       }
@@ -185,17 +192,14 @@ let updateAd = withApiAuthRequired(
       let updatedData = req.body;
 
       if (!id || !updatedData) {
-        return res.status(400).send("ad id is required");
+        return res.status(400).send("ad data is required");
       }
 
       let ad;
       try {
         ad = await Ad.findOneAndUpdate(
-          { _id: id, authorId: userInDb._id },
-          { $set: updatedData },
-          {
-            runValidators: true,
-          }
+          { _id: id, author: userInDb._id },
+          { $set: updatedData }
         );
       } catch (err) {
         return res.status(404).send(err);
