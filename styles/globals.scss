@@ -13,9 +13,9 @@
 
 $text: #170202;
 $background: #ffffff;
-$primary: #0d7d7d;
+$primary: #002f34;
 $secondary: #fac3c3;
-$accent: #17dada;
+$accent: #002f34;
 
 html,
 body {
@@ -69,7 +69,7 @@ html::-webkit-scrollbar-thumb {
 }
 
 ::selection {
-  background: var(--primary);
+  background: $primary;
   color: white;
 }
 .minHiegth {

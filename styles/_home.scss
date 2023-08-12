@@ -536,11 +536,8 @@ section.howitwork {
 }
 
 footer {
-  background-color: $secondary;
+  background-color: $primary;
   color: $text;
-  > svg {
-    color: $secondary;
-  }
 }
 
 .spinner {

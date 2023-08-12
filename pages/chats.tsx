@@ -9,6 +9,8 @@ import Link from "next/link";
 import { IoClose } from "react-icons/io5";
 import Icon from "../components/icon";
 
+export const getServerSideProps = withPageAuthRequired();
+
 export default function Chats() {
   let { profile, isLoading: isLoad } = useProfile();
   let { chats, isLoading, error } = useChats();
