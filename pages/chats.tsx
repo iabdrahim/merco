@@ -8,6 +8,7 @@ import { useChats, useProfile } from "../utils/useApi";
 import Link from "next/link";
 import { IoClose } from "react-icons/io5";
 import Icon from "../components/icon";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 export const getServerSideProps = withPageAuthRequired();
 

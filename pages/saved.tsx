@@ -1,3 +1,4 @@
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import React from "react";
 import Cards from "../components/cards";
 import Container from "../components/Container";
