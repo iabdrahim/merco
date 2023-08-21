@@ -2,6 +2,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiImageAdd, BiXCircle } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
@@ -20,7 +21,7 @@ import ALL from "../ALL.config";
 import Container from "../components/Container";
 import Icon from "../components/icon";
 import { updater, useProfile } from "../utils/useApi";
-export const getServerSideProps = withPageAuthRequired();
+// export const getServerSideProps = withPageAuthRequired();
 
 export default function Post() {
   let { profile } = useProfile();
@@ -63,17 +64,23 @@ export default function Post() {
     if (!profile?._id) setMessage(true);
     adData.images = adData.images.filter((el) => el != "");
     if (!adData.images) {
+      toast.error("please add one image at least");
       return;
     }
-    let res = await fetch(ALL.ApiEndPoint + "/ads?email=" + profile?.email, {
-      method: "POST",
-      body: JSON.stringify(adData),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    let data = await res.json();
-    return data;
+    try {
+      let res = await fetch(ALL.ApiEndPoint + "/ads?email=" + profile?.email, {
+        method: "POST",
+        body: JSON.stringify(adData),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      if (res.ok) {
+        toast.success("your ad is posted successfully");
+      }
+    } catch (err) {
+      toast.error(`Error: ${err}`);
+    }
   };
   let r = useRouter();
 
@@ -90,23 +97,27 @@ export default function Post() {
       method: "POST",
       body: data,
     };
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dgvxswr30/image/upload",
-      config
-    );
-    const file: { secure_url: string } = await res.json();
+    let file: { secure_url: string };
+    try {
+      let res = await fetch(
+        "https://api.cloudinary.com/v1_1/dgvxswr30/image/upload",
+        config
+      );
+      file = await res.json();
+    } catch {
+      toast.error("An error happend, This image didn't upload.");
+      return;
+    }
     let newdata = adData;
     newdata.images[Number(e.target.id)] = file.secure_url;
-    console.log(newdata);
-    setData(newdata);
+    setData({ ...newdata });
+    toast.success("image is uploaded successfully");
     e.target.value = "";
-    r.push("/post", {}, { shallow: true });
   };
   let handleRemove = (e: any) => {
     let newdata = adData;
     newdata.images[Number(e.target.id)] = "";
-    setData(newdata);
-    r.push("/post", {}, { shallow: true });
+    setData({ ...newdata });
   };
   return (
     <div className="sell">
@@ -319,7 +330,7 @@ export default function Post() {
               <div className="flex justify-start gap-4 items-center" key={i}>
                 <input
                   type="text"
-                  placeholder="state"
+                  placeholder="brand"
                   value={d.name}
                   onChange={(e) => {
                     let newdata = adData.details;
@@ -332,11 +343,11 @@ export default function Post() {
 
                 <input
                   type="text"
-                  placeholder="good"
-                  value={d.name}
+                  placeholder="Nike"
+                  value={d.value}
                   onChange={(e) => {
                     let newdata = adData.details;
-                    newdata[i].name = e.target.value;
+                    newdata[i].value = e.target.value;
                     setData({ ...adData, details: newdata });
                   }}
                   name="title"

@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useRouter } from "next/dist/client/router";
+import { useState, useEffect } from "react";
 import Cards from "../../components/cards";
+import Container from "../../components/Container";
+import Spinner from "../../components/ui/spinner";
 import UserAside from "../../components/useraside";
 import { useProfile, useSearch } from "../../utils/useApi";
 
@@ -27,9 +30,18 @@ export default function Profile() {
     setSort(v);
     e.target.classList.add("active");
   };
-
-  if (!profile) {
-    return "404 not found";
+  let r = useRouter();
+  useEffect(() => {
+    if (!profile && !isLoad) {
+      r.push("/404");
+    }
+  }, [profile]);
+  if (!profile || isLoad) {
+    return (
+      <Container className="bg-white fixed left-0 top-0 h-screen">
+        <Spinner />
+      </Container>
+    );
   }
   return (
     <div className="search max-md:flex-col">

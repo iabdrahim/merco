@@ -1,38 +1,56 @@
 import useSWR from "swr";
 import { IAd, IChat, IUser } from "./interfaces";
+import toast from "react-hot-toast";
 
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 const updater = async (url: string, body: {}) => {
-  let data = await fetch(url, {
-    method: "PUT",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  }).catch((err) => err);
-  let r = await data.json();
-  return r;
+  try {
+    let data = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    let r = await data.json();
+
+    toast.success(`updated successfully`);
+    return r;
+  } catch (err) {
+    toast.error(`Error: ${err}`);
+    return {};
+  }
 };
 const deleter = async (url: string, id: string | undefined) => {
-  let data = await fetch(url + "/" + id, {
-    method: "DELETE",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  }).catch((err) => err);
-  let r = await data.json();
-  return r;
+  try {
+    let data = await fetch(url + "/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    let r = await data.json();
+    toast.success(`deleted successfully`);
+    return r;
+  } catch (err) {
+    toast.error(`Error: ${err}`);
+  }
 };
 const poster = async (url: string, body: {}) => {
-  let data = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  }).catch((err) => err);
-  let r = await data.json();
-  return r;
+  try {
+    let data = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    let r = await data.json();
+    toast.success(`posted successfully`);
+    return r;
+  } catch (err) {
+    toast.error(`Error: ${err}`);
+  }
 };
 
 function useAd(id: string | any) {

@@ -2,7 +2,6 @@ import React from "react";
 import CitiesPop from "./ui/citiesPop";
 import Navlinks from "./ui/navlinks";
 import Searchform from "./ui/searchform";
-import { PiFlowerDuotone } from "react-icons/pi";
 import Link from "next/link";
 import Image from "next/image";
 

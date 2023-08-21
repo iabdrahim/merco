@@ -139,8 +139,10 @@ export default function InfoSide({
                   goods available on the site.
                 </p>
                 <h5 className="flex gap-2 items-center justify-center mt-4">
-                  Call Nasre Safaa:
-                  <a href="tel:+212636205314">+212 636205314</a>
+                  Call {ad?.author?.name}:
+                  <a href={"tel:" + ad?.author?.phoneNumber}>
+                    {ad?.author?.phoneNumber}
+                  </a>
                 </h5>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { useAUser, useProfile, useSearch } from "../../utils/useApi";
 import { NextPageContext } from "next";
 import UserAside from "../../components/useraside";
 import { useRouter } from "next/router";
+import Spinner from "../../components/ui/spinner";
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   return { props: { id: ctx.query.id } };
@@ -37,10 +38,12 @@ export default function Ads({ id }: { id: string }) {
     if (user?._id == profile?._id) {
       r.push("/profile");
     }
+    if (err) {
+      r.push("/404");
+    }
   }, [profile, user]);
-
-  if (!user) {
-    return "404 not found";
+  if (!user || isLoad) {
+    return <Spinner />;
   }
   return (
     <div className="search max-md:flex-col">

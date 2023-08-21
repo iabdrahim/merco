@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-// import { ToastContainer } from "react-toastify";
 import Nav from "./nav";
 import Footer from "./footer";
 import Container from "./Container";
 import Spinner from "./ui/spinner";
+import { Toaster } from "react-hot-toast";
+
 export default function Layout({ children }: { children: any }) {
   let r = useRouter();
   let noNavAndFooter = ["/post", "/chats"];
@@ -37,6 +38,11 @@ export default function Layout({ children }: { children: any }) {
       {!noNavAndFooter.some((el) => el == r.asPath) && <Nav />}
       {children}
       {!noNavAndFooter.some((el) => el == r.asPath) && <Footer />}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{ duration: 2 }}
+      />
     </>
   );
 }

@@ -1,7 +1,8 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
-import { FiFacebook, FiTwitter } from "react-icons/fi";
+import { FaImage } from "react-icons/fa";
 import { HiOutlinePhone } from "react-icons/hi";
 import {
   IoClose,
@@ -10,19 +11,11 @@ import {
   IoMail,
   IoSave,
 } from "react-icons/io5";
+import { PiPencil } from "react-icons/pi";
 import ALL from "../ALL.config";
 import { IUser } from "../utils/interfaces";
-import Icon from "./icon";
-import {
-  FaFacebook,
-  FaImage,
-  FaImages,
-  FaMailBulk,
-  FaTwitter,
-} from "react-icons/fa";
-import { PiPencil } from "react-icons/pi";
-import { useRouter } from "next/router";
 import { updater } from "../utils/useApi";
+import Icon from "./icon";
 
 export default function UserAside({
   user,
@@ -62,7 +55,6 @@ export default function UserAside({
     e.target.value = "";
     updater("/api/users/profile", { avatar: file.secure_url });
     setDataEdite({ ...dataEdite, avatar: false });
-    r.push("/profile", {}, { shallow: true });
   };
   // useEffect(()=>{},[profileData])
   return (

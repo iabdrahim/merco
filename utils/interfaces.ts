@@ -16,7 +16,7 @@ export interface IAd {
   price: number;
   tags: [string];
   city: string;
-  details: [{ name: string; value: string }];
+  details: [{ name: string; value: string; _id: string }];
   description: string;
   catagorie: string;
   images: [string];
