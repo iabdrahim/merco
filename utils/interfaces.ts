@@ -14,13 +14,12 @@ export interface IAd {
   _id: string;
   title: string;
   price: number;
-  tags: [string];
+  tags: string[];
   city: string;
   details: { name: string; value: string; _id: string }[];
   description: string;
   catagorie: string;
   images: string[];
-  authorId: string;
   author: IUser;
   createdAt: Date;
   rating: number;

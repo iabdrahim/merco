@@ -64,7 +64,7 @@ export default function InfoSide({
         <span>DH</span>
       </h3>
       <div className="flex justify-between w-full items-center flex-wrap gap-2">
-        <Link href={"/profile/" + ad?._id}>
+        <Link href={"/profile/" + ad?.author._id}>
           <div className="user">
             <div className="avatar">
               <img src={ad?.author?.avatar || "/user.png"} alt={ad.title} />
