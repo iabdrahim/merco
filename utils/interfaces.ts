@@ -16,10 +16,10 @@ export interface IAd {
   price: number;
   tags: [string];
   city: string;
-  details: [{ name: string; value: string; _id: string }];
+  details: { name: string; value: string; _id: string }[];
   description: string;
   catagorie: string;
-  images: [string];
+  images: string[];
   authorId: string;
   author: IUser;
   createdAt: Date;

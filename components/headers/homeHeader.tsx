@@ -18,7 +18,7 @@ let catagories = [
 
 export default function Header() {
   let { setFilterQuery } = useContext(filterQueryContext);
-  const [limit, setlimit] = useState(24);
+  const [limit, setlimit] = useState(12);
   const [Ads, setAds] = useState<IAd[] | null>(null);
   let { ads, isLoading, error } = useAds("limit=" + limit);
   useEffect(() => {

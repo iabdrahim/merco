@@ -12,7 +12,8 @@ let getAds = async (req: NextApiRequest, res: NextApiResponse) => {
     let pageSize = +(perpage || 12); // Number of results per page
     let ads = Ad.find({})
       .skip((pg - 1) * pageSize)
-      .limit(pageSize);
+      .limit(pageSize)
+      .sort("-createdAt");
 
     if (fields) {
       let fieldsList = (fields as string).split(",").join(" ");

@@ -5,6 +5,7 @@ import { NextPageContext } from "next";
 import UserAside from "../../components/useraside";
 import { useRouter } from "next/router";
 import Spinner from "../../components/ui/spinner";
+import Container from "../../components/Container";
 
 export const getServerSideProps = (ctx: NextPageContext) => {
   return { props: { id: ctx.query.id } };
@@ -35,15 +36,20 @@ export default function Ads({ id }: { id: string }) {
   };
   let r = useRouter();
   useEffect(() => {
-    if (user?._id == profile?._id) {
+    if (user && profile && user?._id === profile?._id) {
+      console.log("same");
       r.push("/profile");
     }
-    if (err) {
+    if (!user && !isLoad) {
       r.push("/404");
     }
-  }, [profile, user]);
+  }, [profile, user, isLoad]);
   if (!user || isLoad) {
-    return <Spinner />;
+    return (
+      <Container className="bg-white">
+        <Spinner />
+      </Container>
+    );
   }
   return (
     <div className="search max-md:flex-col">

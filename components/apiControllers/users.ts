@@ -31,9 +31,6 @@ let getUser = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch (err) {
       return res.status(404).send("no user found");
     }
-    if (!user) {
-      return res.status(404).send("no user found");
-    }
 
     return res.status(200).send(user);
   } catch (err: any) {

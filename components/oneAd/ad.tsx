@@ -46,10 +46,7 @@ export default function Ad({
       )}
       <Link href={"/ads/" + data._id}>
         <div className="image">
-          <img
-            src="https://content.avito.ma/classifieds/images/10102722141?t=images"
-            alt=""
-          />
+          <img src={data.images.length == 0 ? "" : data.images[0]} alt="" />
         </div>
       </Link>
       <div className="info flex justify-between items-start relative">
@@ -78,10 +75,6 @@ export default function Ad({
           </button>
         </div>
       </div>
-      {/* <div className="w-full border-t border-gray-200 gap-2 flex items-center text-gray-400 pl-2">
-        <TiLocationOutline />
-        Dar bidda drb rlaf
-      </div> */}
     </div>
   );
 }

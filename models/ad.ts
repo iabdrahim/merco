@@ -47,6 +47,8 @@ const AdSchema = new Schema(
   }
 );
 
+// delete models.User;
+
 let Ad = models.Ad;
 if (!Ad) {
   Ad = model("Ad", AdSchema);

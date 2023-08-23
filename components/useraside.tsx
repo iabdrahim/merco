@@ -28,14 +28,17 @@ export default function UserAside({
   const [dataEdite, setDataEdite] = useState<{
     name: boolean;
     avatar: boolean;
+    phoneNumber: boolean;
     location: boolean;
   }>({
     name: false,
+    phoneNumber: false,
     avatar: false,
     location: false,
   });
   const [nvalue, setNValue] = useState(user.name || "");
   const [lvalue, setLValue] = useState(user.location || "");
+  const [pvalue, setPValue] = useState(user.phoneNumber || "");
   let r = useRouter();
   //upload a image to cloud
   let handleUpload = async (e: any) => {
@@ -56,9 +59,8 @@ export default function UserAside({
     updater("/api/users/profile", { avatar: file.secure_url });
     setDataEdite({ ...dataEdite, avatar: false });
   };
-  // useEffect(()=>{},[profileData])
   return (
-    <aside className="filters">
+    <aside className="filters top-8">
       <div className="user px-6 flex flex-col gap-6 w-full">
         <div className="w-32 avatarChanger mx-auto rounded-full h-32 overflow-hidden relative">
           <img
@@ -144,6 +146,43 @@ export default function UserAside({
               <PiPencil
                 size={20}
                 onClick={() => setDataEdite({ ...dataEdite, location: true })}
+              />
+            ))}
+        </div>
+        <div className="flex gap-4 editable items-center">
+          {!dataEdite.phoneNumber && <h4>phoneNumber:</h4>}
+          {dataEdite.phoneNumber ? (
+            <input
+              type="text"
+              value={pvalue}
+              onChange={(e) => setPValue(e.target.value)}
+            />
+          ) : (
+            <span>{user.phoneNumber}</span>
+          )}
+          {isEditeProfile &&
+            (dataEdite.phoneNumber ? (
+              <div className="flex gap-2 items-center">
+                <IoSave
+                  size={20}
+                  onClick={() => (
+                    updater("/api/users/profile", { phoneNumber: pvalue }),
+                    setDataEdite({ ...dataEdite, phoneNumber: false })
+                  )}
+                />
+                <IoClose
+                  size={20}
+                  onClick={() =>
+                    setDataEdite({ ...dataEdite, phoneNumber: false })
+                  }
+                />
+              </div>
+            ) : (
+              <PiPencil
+                size={20}
+                onClick={() =>
+                  setDataEdite({ ...dataEdite, phoneNumber: true })
+                }
               />
             ))}
         </div>

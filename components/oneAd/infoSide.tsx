@@ -64,12 +64,14 @@ export default function InfoSide({
         <span>DH</span>
       </h3>
       <div className="flex justify-between w-full items-center flex-wrap gap-2">
-        <div className="user">
-          <div className="avatar">
-            <img src={ad?.author?.avatar || "/user.png"} alt={ad.title} />
+        <Link href={"/profile/" + ad?._id}>
+          <div className="user">
+            <div className="avatar">
+              <img src={ad?.author?.avatar || "/user.png"} alt={ad.title} />
+            </div>
+            <h4>{ad?.author?.name || "unknown"}</h4>
           </div>
-          <h4>{ad?.author?.name || "unknown"}</h4>
-        </div>
+        </Link>
         <div className="userActions flex justify-start items-center">
           <button onClick={() => setphonePop(true)}>
             <HiOutlinePhone size={20} />
